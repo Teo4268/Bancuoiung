@@ -4,123 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Music Player</title>
-    <style>
-        /* Tổng quan */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Arial', sans-serif;
-            background-color: #121212;
-            color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .player-container {
-            text-align: center;
-            background: #1e1e1e;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
-            width: 90%;
-            max-width: 600px;
-            padding: 20px;
-        }
-
-        h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        .song-list {
-            list-style: none;
-            padding: 0;
-            margin: 20px 0;
-        }
-
-        .song-list li {
-            padding: 10px;
-            margin-bottom: 10px;
-            background: #2a2a2a;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .song-list li:hover {
-            background: #333333;
-        }
-
-        .active-song {
-            background: #4caf50;
-            color: #fff;
-        }
-
-        audio {
-            width: 100%;
-            margin-top: 20px;
-        }
-
-        .footer {
-            margin-top: 20px;
-            font-size: 14px;
-            color: #888;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="player-container">
-        <h1>Music Player</h1>
-        <ul class="song-list" id="songList">
-            <!-- Danh sách bài hát -->
-        </ul>
-        <audio id="audioPlayer" controls></audio>
-        <div class="footer">
-            Developed by Your Name
-        </div>
+    <div class="container">
+        <h1>Music Playlist</h1>
+        <ul id="songList"></ul>
     </div>
-
-    <script>
-        // Danh sách bài hát
-        const songs = [
-            { name: "Nơi Này Có Anh", url: "https://api-nghenhac.onrender.com/uploads/NOI%20NAY%20CO%20ANH%20VAVH.mp3" },
-            { name: "Bài hát 2", url: "https://example.com/song2.mp3" },
-            { name: "Bài hát 3", url: "https://example.com/song3.mp3" }
-        ];
-
-        const songListElement = document.getElementById('songList');
-        const audioPlayer = document.getElementById('audioPlayer');
-
-        // Tạo danh sách bài hát
-        songs.forEach((song, index) => {
-            const li = document.createElement('li');
-            li.textContent = song.name;
-            li.dataset.index = index;
-
-            // Xử lý khi click vào bài hát
-            li.addEventListener('click', () => {
-                document.querySelectorAll('.song-list li').forEach(item => item.classList.remove('active-song'));
-                li.classList.add('active-song');
-                audioPlayer.src = song.url;
-                audioPlayer.play();
-            });
-
-            songListElement.appendChild(li);
-        });
-
-        // Tự động phát bài hát tiếp theo
-        audioPlayer.addEventListener('ended', () => {
-            const currentIndex = songs.findIndex(song => song.url === audioPlayer.src);
-            const nextIndex = (currentIndex + 1) % songs.length;
-            const nextSong = songs[nextIndex];
-
-            document.querySelectorAll('.song-list li').forEach(item => item.classList.remove('active-song'));
-            document.querySelector(`.song-list li[data-index="${nextIndex}"]`).classList.add('active-song');
-
-            audioPlayer.src = nextSong.url;
-            audioPlayer.play();
-        });
-    </script>
+    <div class="audio-player">
+        <audio id="audioPlayer" controls></audio>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
