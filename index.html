@@ -1,19 +1,93 @@
-<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Player</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Music Playlist</h1>
-        <ul id="songList"></ul>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Music Player
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet"/>
+  <style>
+   .rainbow-border {
+    border: 2px solid;
+    border-image-slice: 1;
+    border-width: 2px;
+    border-image-source: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+   }
+  </style>
+ </head>
+ <body class="bg-black text-white font-roboto">
+  <div class="container mx-auto p-4">
+   <div class="bg-black rounded-lg shadow-lg p-2 mb-4 rainbow-border">
+    <div class="mb-2">
+     <h2 class="text-lg font-bold">
+      Song Title 1
+     </h2>
     </div>
-    <div class="audio-player">
-        <audio id="audioPlayer" controls></audio>
+    <audio class="w-full" controls="">
+     <source src="https://api-nghenhac.onrender.com/uploads/5_6084420717858788255.mp3" type="audio/mpeg"/>
+     Your browser does not support the audio element.
+    </audio>
+   </div>
+   <div class="bg-black rounded-lg shadow-lg p-2 mb-4 rainbow-border">
+    <div class="mb-2">
+     <h2 class="text-lg font-bold">
+      Song Title 2
+     </h2>
     </div>
-    <script src="script.js"></script>
-</body>
+    <audio class="w-full" controls="">
+     <source src="https://api-nghenhac.onrender.com/uploads/NOI%20NAY%20CO%20ANH%20VAVH.mp3" type="audio/mpeg"/>
+     Your browser does not support the audio element.
+    </audio>
+   </div>
+   <div class="bg-black rounded-lg shadow-lg p-2 mb-4 rainbow-border">
+    <div class="mb-2">
+     <h2 class="text-lg font-bold">
+      Song Title 3
+     </h2>
+    </div>
+    <audio class="w-full" controls="">
+     <source src="https://api-nghenhac.onrender.com/uploads/song3.mp3" type="audio/mpeg"/>
+     Your browser does not support the audio element.
+    </audio>
+   </div>
+   <div class="bg-black rounded-lg shadow-lg p-2 mb-4 rainbow-border">
+    <div class="mb-2">
+     <h2 class="text-lg font-bold">
+      Song Title 4
+     </h2>
+    </div>
+    <audio class="w-full" controls="">
+     <source src="https://api-nghenhac.onrender.com/uploads/song4.mp3" type="audio/mpeg"/>
+     Your browser does not support the audio element.
+    </audio>
+   </div>
+   <div class="bg-black rounded-lg shadow-lg p-2 mb-4 rainbow-border">
+    <div class="mb-2">
+     <h2 class="text-lg font-bold">
+      Song Title 5
+     </h2>
+    </div>
+    <audio class="w-full" controls="">
+     <source src="https://api-nghenhac.onrender.com/uploads/song5.mp3" type="audio/mpeg"/>
+     Your browser does not support the audio element.
+    </audio>
+   </div>
+   <div class="bg-black rounded-lg shadow-lg p-2 fixed bottom-4 right-4 rainbow-border">
+    <p class="text-lg font-bold text-center">
+     Nghe Nhạc Vui Vẻ Ạ 🤗
+    </p>
+   </div>
+   <div class="bg-black rounded-lg shadow-lg p-2 fixed bottom-20 right-4 rainbow-border">
+    <p class="text-lg font-bold text-center">
+     Luôn cần Ý Kiến Của Mọi Người
+    </p>
+    <a class="text-blue-400 underline text-center block mt-2" href="https://t.me/emteothanthien" target="_blank">
+     https://t.me/emteothanthien
+    </a>
+   </div>
+  </div>
+ </body>
 </html>
