@@ -1,107 +1,186 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chào mừng ae đến với kho nhạc</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Made By Teo</title>
+  <link rel="stylesheet" href="style.css">
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
 </head>
-<body class="bg-black text-white font-roboto">
-  <div class="container mx-auto p-4">
-    <!-- Song List -->
-    <div class="bg-black rounded-lg shadow-lg p-2 mb-4 rainbow-border">
-      <div class="mb-2">
-        <h2 class="rainbow-text">NST #1</h2>
-      </div>
-      <audio class="w-full" controls>
-        <source src="https://military-merrie-tranteo777-3c17b2c8.koyeb.app/uploads/5_6084420717858788255.mp3" type="audio/mpeg" />
-        Your browser does not support the audio element.
-      </audio>
-    </div>
-    <div class="bg-black rounded-lg shadow-lg p-2 mb-4 rainbow-border">
-      <div class="mb-2">
-        <h2 class="text-lg font-bold">Nơi Này Có Anh - Vavh</h2>
-      </div>
-      <audio class="w-full" controls>
-        <source src="https://military-merrie-tranteo777-3c17b2c8.koyeb.app/uploads/NOI%20NAY%20CO%20ANH%20VAVH.mp3" type="audio/mpeg" />
-        Your browser does not support the audio element.
-      </audio>
-    </div>
-    <!-- Additional songs -->
-    <div class="bg-black rounded-lg shadow-lg p-2 mb-4 rainbow-border">
-      <div class="mb-2">
-        <h2 class="text-lg font-bold">NST #3</h2>
-      </div>
-      <audio class="w-full" controls>
-        <source src="https://mhbdmjnfansg-cf.hf.space/uploads/5_6237997113297342871.mp3" type="audio/mpeg" />
-        Your browser does not support the audio element.
-      </audio>
-    </div>
-    <div class="bg-black rounded-lg shadow-lg p-2 mb-4 rainbow-border">
-      <div class="mb-2">
-        <h2 class="text-lg font-bold">HOUSELAK #1</h2>
-      </div>
-      <audio class="w-full" controls>
-        <source src="https://military-merrie-tranteo777-3c17b2c8.koyeb.app/uploads/5_6294074787589262501.mp3" type="audio/mpeg" />
-        Your browser does not support the audio element.
-      </audio>
-    </div>
-    <div class="bg-black rounded-lg shadow-lg p-2 mb-4 rainbow-border">
-      <div class="mb-2">
-        <h2 class="text-lg font-bold">Để Anh Lương Thiện - thắng eo vì</h2>
-      </div>
-      <audio class="w-full" controls>
-        <source src="https://military-merrie-tranteo777-3c17b2c8.koyeb.app/uploads/De%20Anh%20Luong%20Thien%20-%20Thang%20Eo%20Vi%20%7C%7C%20Full%20Option.mp3" type="audio/mpeg" />
-        Your browser does not support the audio element.
-      </audio>
-    </div>
-    <div class="bg-black rounded-lg shadow-lg p-2 mb-4 rainbow-border">
-      <div class="mb-2">
-        <h2 class="rainbow-text">NST #4</h2>
-      </div>
-      <audio class="w-full" controls>
-        <source src="https://military-merrie-tranteo777-3c17b2c8.koyeb.app/uploads/5_6285093740390389893.mp3" />
-        Your browser does not support the audio element.
-      </audio>
-    </div>
-    <div class="bg-black rounded-lg shadow-lg p-2 mb-4 rainbow-border">
-      <div class="mb-2">
-        <h2 class="text-lg font-bold">NST #2</h2>
-      </div>
-      <audio class="w-full" controls>
-        <source src="https://mhbdmjnfansg-cf.hf.space/uploads/5_6287077508474999189.mp3.mp3" type="audio/mpeg" />
-        Your browser does not support the audio element.
-      </audio>
+<body>
+
+  <div class="container">
+    <div id="playlist">
+      <!-- 🟢 DANH SÁCH BÀI HÁT - THÊM NHẠC TẠI ĐÂY -->
+      <div class="song-card">
+        <div class="flex-1">
+          <h2 class="text-lg font-bold">NST #1</h2>
+          <div class="progress-bar"><div class="progress"></div></div>
+          <span class="time">00:00 / 00:00</span>
         </div>
-    <div class="bg-black rounded-lg shadow-lg p-2 mb-4 rainbow-border">
-      <div class="mb-2">
-        <h2 class="text-lg font-bold">NST #5 </h2>
+        <button class="play-btn"><i class="fas fa-play"></i></button>
+        <audio>
+          <source src="https://storage.googleapis.com/kagglesdsdata/datasets/6618770/10700382/5_6136665249803147003.mp3?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=gcp-kaggle-com%40kaggle-161607.iam.gserviceaccount.com%2F20250210%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250210T051353Z&X-Goog-Expires=259200&X-Goog-SignedHeaders=host&X-Goog-Signature=79c61858609add16e0a696fa0c9f0d4bfb4069644e017912086fb041685c7c586fa236a1dd0457102a05c46d094394be9ed5ec2fd7d9e4e21769ebeb22d653bdc01f314576e0de4a97ffe8c4d240ae53ad2df7bae834959b2fef7cb26f85a770d02c77a34f3e1479e8a4edcd63489119c3a3ad9ebbf318b3e78ab9c07ca77788fb0bcf0e7ce9b6390ad23b7ba8612932c4cfd8e582f4c21185570af15a05b6725365ca26e0122b502418bb4700e685639713fa37733ace2ebd1022e8a96d0d71e8b5cd9e05077fcbd18103c56206ede867100b88a318c2363d9773e3efc4dcccd6817b9cb522dff459b0901eb496e293311f8b7596f55800b234b9d608bab186" type="audio/mpeg">
+        </audio>
       </div>
-      <audio class="w-full" controls>
-        <source src="https://back-marcie-datamusic-ada8faad.koyeb.app/uploads/C%C4%83ng%20t%C6%B0%C6%A1i%20%231.mp3" type="audio/mpeg" />
-        Your browser does not support the audio element.
-      </audio>
+
+      <div class="song-card">
+        <div class="flex-1">
+          <h2 class="text-lg font-bold">NST #2</h2>
+          <div class="progress-bar"><div class="progress"></div></div>
+          <span class="time">00:00 / 00:00</span>
+        </div>
+        <button class="play-btn"><i class="fas fa-play"></i></button>
+        <audio>
+          <source src="https://storage.googleapis.com/kagglesdsdata/datasets/6618770/10700382/5_6152345415191628545.wav?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=gcp-kaggle-com%40kaggle-161607.iam.gserviceaccount.com%2F20250210%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250210T045504Z&X-Goog-Expires=259200&X-Goog-SignedHeaders=host&X-Goog-Signature=315c26808ffd2b952b7a8aeeda7946a83b0c3fac83a0340faf75600c9535a474ec1f93494fd6f55e5873bfbf7f98e0ee2f276564831b4903dcc7cfcefbfc0763e5926779c61d8b403cfea2be5f1a0561a9772e0a0879d7e96187d709a52d70eb55e8e256a376673c66366a0fc414caef0225d5d2ef0b0323ea0693a2bf61e209dc199b38227fa2a464172cfe48833f8a521c0e5bbb7ae8b0ecce0feb0b82374dbb0f266e07da960684e6ebf2cdcbba4b2fd9ba1571a87ead2a6b19a5f470e28d58044ca54a1e9cecdd840640fe3b1f4ea767b9dca1cc4856c81cdff733257b6e2e17ab490867c2c47887470426951acc0d252446b3c634ae978efca8cb153a07" type="audio/mpeg">
+        </audio>
+      </div>
+
+      <div class="song-card">
+        <div class="flex-1">
+          <h2 class="text-lg font-bold">NST #3</h2>
+          <div class="progress-bar"><div class="progress"></div></div>
+          <span class="time">00:00 / 00:00</span>
+        </div>
+        <button class="play-btn"><i class="fas fa-play"></i></button>
+        <audio>
+          <source src="https://storage.googleapis.com/kagglesdsdata/datasets/6618770/10700382/5_6129752139162981877.mp3?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=gcp-kaggle-com%40kaggle-161607.iam.gserviceaccount.com%2F20250210%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250210T051546Z&X-Goog-Expires=259200&X-Goog-SignedHeaders=host&X-Goog-Signature=81a67fa809227f18486e4ad8985d132507e6af7857caae5b38826ee5847ae52cb71045319fdb2ea6a67cd1ee5c05c33b468d9709be75861a844a1389d415dfa6fcf113b1cc49aad01368e5c0e5a0f993bdfa4383bf564872327e7c47f7da83d6e362455b471fee65f3030aa683cee9efe454aa9658f2ed67dc8db5b4e1efe5310ff75afe97615cd2b3947245ac81a6b962397087c060c4420f6bbce1a6485c0e22ddc598eadcf62cf3c9f95c8c265d9ca0fb98abd830e33fadc41cdc3545a9c45b4a63533fca55f027d209bb591aba75f140976465cdd2625081b1fb56b12d68bf78d5add0972cdd3347bd29b150664a997777af21181fef8c7df37f0bcf42ec" type="audio/mpeg">
+        </audio>
+      </div>
+      
+       <div class="song-card">
+        <div class="flex-1">
+          <h2 class="rainbow-text">NST #4</h2>
+          <div class="progress-bar"><div class="progress"></div></div>
+          <span class="time">00:00 / 00:00</span>
+        </div>
+        <button class="play-btn"><i class="fas fa-play"></i></button>
+        <audio>
+          <source src="https://military-merrie-tranteo777-3c17b2c8.koyeb.app/uploads/5_6084420717858788255.mp3" type="audio/mpeg">
+        </audio>
+       </div>
+      
+       <div class="song-card">
+        <div class="flex-1">
+          <h2 class="rainbow-text">NST #5</h2>
+          <div class="progress-bar"><div class="progress"></div></div>
+          <span class="time">00:00 / 00:00</span>
+        </div>
+        <button class="play-btn"><i class="fas fa-play"></i></button>
+        <audio>
+          <source src="https://military-merrie-tranteo777-3c17b2c8.koyeb.app/uploads/5_6285093740390389893.mp3" type="audio/mpeg">
+        </audio>
+       </div>
+
+       <div class="song-card">
+        <div class="flex-1">
+          <h2 class="text-lg font-bold">NST #6</h2>
+          <div class="progress-bar"><div class="progress"></div></div>
+          <span class="time">00:00 / 00:00</span>
+        </div>
+        <button class="play-btn"><i class="fas fa-play"></i></button>
+        <audio>
+          <source src="https://back-marcie-datamusic-ada8faad.koyeb.app/uploads/C%C4%83ng%20t%C6%B0%C6%A1i%20%231.mp3" type="audio/mpeg">
+        </audio>
+       </div>
+
+      <div class="song-card">
+        <div class="flex-1">
+          <h2 class="text-lg font-bold">HOUSELAK #1</h2>
+          <div class="progress-bar"><div class="progress"></div></div>
+          <span class="time">00:00 / 00:00</span>
+        </div>
+        <button class="play-btn"><i class="fas fa-play"></i></button>
+        <audio>
+          <source src="https://back-marcie-datamusic-ada8faad.koyeb.app/uploads/5_6321266148230827692.mp3" type="audio/mpeg">
+        </audio>
+      </div>
+
+      <div class="song-card">
+        <div class="flex-1">
+          <h2 class="rainbow-text">NST #7</h2>
+          <div class="progress-bar"><div class="progress"></div></div>
+          <span class="time">00:00 / 00:00</span>
+        </div>
+        <button class="play-btn"><i class="fas fa-play"></i></button>
+        <audio>
+          <source src="https://back-marcie-datamusic-ada8faad.koyeb.app/uploads/5_6298665944419929236.mp3" type="audio/mpeg">
+        </audio>
+      </div>
+
+      <div class="song-card">
+        <div class="flex-1">
+          <h2 class="text-lg font-bold">NST #8</h2>
+          <div class="progress-bar"><div class="progress"></div></div>
+          <span class="time">00:00 / 00:00</span>
+        </div>
+        <button class="play-btn"><i class="fas fa-play"></i></button>
+        <audio>
+          <source src="https://storage.googleapis.com/kagglesdsdata/datasets/6618770/10700382/NST%20TET1.mp3?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=gcp-kaggle-com%40kaggle-161607.iam.gserviceaccount.com%2F20250210%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250210T060426Z&X-Goog-Expires=259200&X-Goog-SignedHeaders=host&X-Goog-Signature=96d2b1c43f680a706b27e8ebd11de40363870630aec030e4193892b9975b54f5f8e19174974bdd6f4628b91c15a5d6c42a0ea7602b86e0ccbb967fe125b93c0a1febcf65f6024ccce78d6d0f3926a299e25f87911d0b1aed443e0a914bbfdf914c03c5a58b725c4111e3709dae5dd4fa07b2c2d7008180e1962c37f671005b8a7244230ddf8585781e2a288309b2e17e1cb677271b3c33a621671aa347b567fd56162faa21243e330c6a4454648749a5c7cf78d9f13ef3a6c5463bf6e896b25fc907e3d21a0268c5528a5dc230bc2dbec3700937274e1e8e0761ddb086ea17a5f61a17449ec29f3b1c55551031dd0e430fca04db5b53d0e5d24782484ea4f7db" type="audio/mpeg">
+        </audio>
+      </div>
+
+      <div class="song-card">
+        <div class="flex-1">
+          <h2 class="text-lg font-bold">NST #9</h2>
+          <div class="progress-bar"><div class="progress"></div></div>
+          <span class="time">00:00 / 00:00</span>
+        </div>
+        <button class="play-btn"><i class="fas fa-play"></i></button>
+        <audio>
+          <source src="https://storage.googleapis.com/kagglesdsdata/datasets/6618770/10700382/5_6057416274193947074.mp3?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=gcp-kaggle-com%40kaggle-161607.iam.gserviceaccount.com%2F20250210%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250210T060525Z&X-Goog-Expires=259200&X-Goog-SignedHeaders=host&X-Goog-Signature=015df5dafd27344301d9cd1c3ef7b244b4476072589aa5a81634a1d1856f6f7436903cfdab71088bd6985fc386129e167050eec94271fa60a5a10a3b091ddec0067e7b07936a0a7c9b51e94ec14976614a9ff970a75ff3a2da1eaf6b978563a9cdca695a951c6b7cac07cbbb2e5619e3ae060dd5d2672eeb971218066f464b82c02cdf9a5e97263366349b7eda205bd0b49d88aaea8c856a8cbb074db286114ef2f6e7ce325da04002770fd76e35d451f91fd9625219cc3dd23b28d21b09333d8309dfcabb7d1500facce627708557c0398bd86e26d641d64d4d72ae23fbb17eb594f27e0f3da08d8c3d7a58b5ee33ca9692337d6f917b98e383cff63c99897e" type="audio/mpeg">
+        </audio>
+      </div>
+
+      <div class="song-card">
+        <div class="flex-1">
+          <h2 class="text-lg font-bold">NST #10</h2>
+          <div class="progress-bar"><div class="progress"></div></div>
+          <span class="time">00:00 / 00:00</span>
+        </div>
+        <button class="play-btn"><i class="fas fa-play"></i></button>
+        <audio>
+          <source src="https://storage.googleapis.com/kagglesdsdata/datasets/6618770/10700382/5_6294074787589262489.mp3?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=gcp-kaggle-com%40kaggle-161607.iam.gserviceaccount.com%2F20250210%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250210T060737Z&X-Goog-Expires=259200&X-Goog-SignedHeaders=host&X-Goog-Signature=310f1342093fb1188e5493ca44a2fd667b56decde2a229dde0f867488cbe30dd5b574879ef5d5b2e4ff95fef6874adc62b6f2993142c6a4a7f84c7775262850c487bdba85ab48004c6497b7b1152fbcf5d9c7c1c1cd81d9833ce05319fb50ecb2d37b6a8b955908ce8df1c5747d1beabfbaf3fa0a5d4f692bb10923ba6490f428c8e7215a6f2486154a7103e1b4a404fd6568e7d7e5cc60f6e2148400ae5ea467a472e8016e57a992c3e3731eb102dfa6064b5736afce0535becc9d9cde4768d0d5694001402350ef7cf34d0b1a0c57735bdc4adfa5cc87e6cbf56774a660e10e899f94a9e7530c0111c1b10fe569c42b1ed42685b2940e96618b68edaa1e86f" type="audio/mpeg">
+        </audio>
+      </div>
+
+      <div class="song-card">
+        <div class="flex-1">
+          <h2 class="text-lg font-bold">NST #11</h2>
+          <div class="progress-bar"><div class="progress"></div></div>
+          <span class="time">00:00 / 00:00</span>
+        </div>
+        <button class="play-btn"><i class="fas fa-play"></i></button>
+        <audio>
+          <source src="https://storage.googleapis.com/kagglesdsdata/datasets/6618770/10700382/5_6298665944419929254.mp3?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=gcp-kaggle-com%40kaggle-161607.iam.gserviceaccount.com%2F20250210%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250210T060910Z&X-Goog-Expires=259200&X-Goog-SignedHeaders=host&X-Goog-Signature=82813568eaa730e4c72b49e52941e709dd8be92af0ca098f54e7feaafa5bfd942c8b85d473cdd42e048249cad90e79ba90da62ce355b73da9db04b6c44fd7e38b318b35f9a5f056c07a3bbd9b60c1f9d0bec337e47004debe2cd7e6ec31066d26bfa8b9585e5ece0b908bd4a97c8425ecacdb4d74a69d7db742e78fcd1840342e8b66f1233419cde80184e91e807c89e58ca8859721a37c3c4973d69ccd8012ffcc18d2c9026599460dac2142850db07d19842ae941d1bf585f9d6a16be5d10f9760e6b08514ce3168e0d5fa8b6e5f2f5340101b9fc5b823e8cd8d97246ffcb2e95198156472a5c04c511bdc5c6804b70df590a935812bec4c6c61ac0e70653c" type="audio/mpeg">
+        </audio>
+      </div>
+
+      <div class="song-card">
+        <div class="flex-1">
+          <h2 class="rainbow-text">NST #12</h2>
+          <div class="progress-bar"><div class="progress"></div></div>
+          <span class="time">00:00 / 00:00</span>
+        </div>
+        <button class="play-btn"><i class="fas fa-play"></i></button>
+        <audio>
+          <source src="https://storage.googleapis.com/kagglesdsdata/datasets/6618770/10700382/5_6170103833650270997.mp3?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=gcp-kaggle-com%40kaggle-161607.iam.gserviceaccount.com%2F20250210%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250210T061112Z&X-Goog-Expires=259200&X-Goog-SignedHeaders=host&X-Goog-Signature=460d63ef5f73101a623b5c84f889da273917098e589a7a260f2be2152728ace8249b6301396a5c2d3d273d2a33c7c4f4c3a6a0f3dc117405529cb24f16ef043cb6846a629e7ba7cf86b729547cb8af6ed9aa754c46ca8cf7bd8c615777fc6f7a096df7dd84fd12762207b8144470e1f06faeb94a897c24a45dc360cbe156abb1dfd177dfe9bf898cd34995cc45444fe0d40f82faad85d691a25de1c0b95781f5a85c50f0f56633fa24e24cc70d272ca5ec1feb7d4db7d13587c5571a068cc1f67778238b31d0c39902d340a8acba7d76a7f8fbe981f1fbe86cbdf4392a066ca2b9d510bae12c065797a3a4884d458788131a38560b099684302b1b653c6e5ced" type="audio/mpeg">
+        </audio>
+      </div>
+
+      
     </div>
-    <div class="bg-black rounded-lg shadow-lg p-2 mb-4 rainbow-border">
-      <div class="mb-2">
-        <h2 class="text-lg font-bold">HOUSELAK #2</h2>
-      </div>
-      <audio class="w-full" controls>
-        <source src="https://back-marcie-datamusic-ada8faad.koyeb.app/uploads/5_6321266148230827692.mp3" type="audio/mpeg" />
-        Your browser does not support the audio element.
-      </audio>
-      </div>
-    <div class="bg-black rounded-lg shadow-lg p-2 mb-4 rainbow-border">
-      <div class="mb-2">
-        <h2 class="rainbow-text">NST #6 ( Nhạc Tết ) </h2>
-      </div>
-      <audio class="w-full" controls>
-        <source src="https://back-marcie-datamusic-ada8faad.koyeb.app/uploads/5_6298665944419929236.mp3" type="audio/mpeg" />
-        Your browser does not support the audio element.
-         <style>
+  </div>
+
+  <!-- Widget Âm Lượng -->
+  <div class="volume-widget">
+    <i class="fas fa-volume-up"></i>
+    <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1">
+  </div>
+
+  <script src="script.js"></script>
+  <style>
     .rainbow-text {
       font-size: 20px;
       font-weight: bold;
@@ -111,76 +190,7 @@
       -webkit-text-fill-color: transparent;
     }
          </style>
-        </div>
-    <div class="bg-black rounded-lg shadow-lg p-2 mb-4 rainbow-border">
-      <div class="mb-2">
-        <h2 class="text-lg font-bold">NST #7 ( Nhạc Tết ) </h2>
-      </div>
-      <audio class="w-full" controls>
-        <source src="https://storage.googleapis.com/kagglesdsdata/datasets/6618770/10700382/NST%20TET1.mp3?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=gcp-kaggle-com%40kaggle-161607.iam.gserviceaccount.com%2F20250210%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250210T040316Z&X-Goog-Expires=259200&X-Goog-SignedHeaders=host&X-Goog-Signature=6a699000d7f9c4ed70e4182679cda7260a357c7e8b9a5156a15ec15d12783c101371e1c5cafba7936b737b86c89c080ea2a4619ec1caf239fdb3d334eb8d5982a7079e2db6f2d1fad8465895f4f9a98266021a95963b70597dbbadbe27fa99724d0052da4936424af5a0bd687bf6172d51786db97709d1631c491fc73db452b7498725c3c381e7c92631c2e406d6d1b3593127ef45112b60c1ea9ab2a0e2f07dbac0cac3f000179e31fa4cca52669c2b82c27e504b663798d1deb3cfba45613d7cee655c914a3b3a543e8cad2d6bd8f88d3533890dc75dfbdccca6602144279375282935425db7223fa0002df22d4f5ea81056991e8a425e08e1536e5c40e910" type="audio/mpeg" />
-        Your browser does not support the audio element.
-  </div>
-    <div class="bg-black rounded-lg shadow-lg p-2 mb-4 rainbow-border">
-      <div class="mb-2">
-        <h2 class="text-lg font-bold">NST #8 ( Nhạc Tết ) </h2>
-      </div>
-      <audio class="w-full" controls>
-        <source src="https://storage.googleapis.com/kagglesdsdata/datasets/6618770/10700382/5_6057416274193947074.mp3?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=gcp-kaggle-com%40kaggle-161607.iam.gserviceaccount.com%2F20250210%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250210T040213Z&X-Goog-Expires=259200&X-Goog-SignedHeaders=host&X-Goog-Signature=334ec6441c8be18cdea0ab8826494fae46b5699cba96210b27cc40dbd0063be2b80638b2fb1c24f6df63c62274eefa2b091bf989e26beb38d138d50deec49a9b11f32d95a8b3f097060e029067e8acec1a624b76b1dbd9578f05b602b339f415bca522389f651464c4ce65451a818cfed4c5d4a8870659c8c952b21cbefc30f92b28e9c77b051a915687fca26349d6bbae5b9ccac6a424c47532b4e5e969c59cfdb7474297bfe0c91cd1d2866fc6d8787a854ef4c67374617995bdf2c28432c928a98b125eb557c2b6b2ac9664a6c0c7cf698aab66ec172ebd6cf6da3ae23013d11d38462a91417e36203742341da4ed42d2cb5ba102eb79183038117009ebfc" type="audio/mpeg" />
-        Your browser does not support the audio element.
-        </div>
-    <div class="bg-black rounded-lg shadow-lg p-2 mb-4 rainbow-border">
-      <div class="mb-2">
-        <h2 class="text-lg font-bold">NST #9 ( Vina ) </h2>
-      </div>
-      <audio class="w-full" controls>
-        <source src="https://storage.googleapis.com/kagglesdsdata/datasets/6618770/10700382/5_6294074787589262489.mp3?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=gcp-kaggle-com%40kaggle-161607.iam.gserviceaccount.com%2F20250210%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250210T040058Z&X-Goog-Expires=259200&X-Goog-SignedHeaders=host&X-Goog-Signature=46e78dcf77eeb30b04d96e6428d1574a319e60d2d961157a517ff5de6df7657c7e6a6bd002dfc9a2cd13953b66b192e7d1fdddec6e9807fb57cb9f4fe302148ad1e0105331149e3ca1801ddb9ca4a65f61a1aedc60113a66da296347971a91cc2ebf952cfe8d0db29f3f6912a24094908bc351aa08f3a13a246a4d8b2a554b4e76e68e6551541d6ff2ed38e9c2a60d3fdb0ccf9c4062ff4957a1cca22fb52a7412276a105d1b3093d6c08d75d27c9b2a0389b766ae5518cde364a669ac4443c1835d9b8a2f7f5f5fd2a3bbc3981049880c9309a957f2b5f7da63c1e5e8720a42f645070ecc777d318d4c07ec9e4a03cfb9293d5a765dc6f8d352e371b81b902e" type="audio/mpeg" />
-        Your browser does not support the audio element.
-        </div>
-    <div class="bg-black rounded-lg shadow-lg p-2 mb-4 rainbow-border">
-      <div class="mb-2">
-        <h2 class="text-lg font-bold">NST #10 </h2>
-      </div>
-      <audio class="w-full" controls>
-        <source src="https://storage.googleapis.com/kagglesdsdata/datasets/6618770/10700382/5_6298665944419929254.mp3?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=gcp-kaggle-com%40kaggle-161607.iam.gserviceaccount.com%2F20250210%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250210T035957Z&X-Goog-Expires=259200&X-Goog-SignedHeaders=host&X-Goog-Signature=1676d906fe73ee7d2ff8e53e7a0ce043b68e2cce1e4198613d51c74e35a6015c4d04e4a42dd0735dd92aa59d097a078880cd471483b983eb121237090f6a89152a57e456b9ee76d7b56ec295f9a01477abb8d1e36012501bc831853861a96d37e87517cdd922d40cbba8cbbe52719313cb3339fe8b2cda21f876888e19b05d419e3b284623b97139455bd0911b5414a666070378e555a6cb8b2943d60f9ece272fd7246378f530442b8a865e61e32fc5ad5116b51cddf81efb09c4e0db42c29e4693afa2372e0f4ba7e2babd5927b482d87257225512a2625cf6669ab996cfa234d3bf149e2f7fab99c3e201b21cf60eef8cb503d602ed91d2a13352ec533f81" type="audio/mpeg" />
-        Your browser does not support the audio element.
-   </div>
-    <div class="bg-black rounded-lg shadow-lg p-2 mb-4 rainbow-border">
-      <div class="mb-2">
-        <h2 class="text-lg font-bold">NST #11 ( tươi ) </h2>
-      </div>
-      <audio class="w-full" controls>
-        <source src="https://storage.googleapis.com/kagglesdsdata/datasets/6618770/10692883/5_6136665249803147003.mp3?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=gcp-kaggle-com%40kaggle-161607.iam.gserviceaccount.com%2F20250208%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250208T062521Z&X-Goog-Expires=259200&X-Goog-SignedHeaders=host&X-Goog-Signature=4034a83fb705f07f954fb0269ddb1486d7d7c239d8c3d1b71dc915b888eb2fc5fd0240315c2ec37febab1ac868187d0ae17591f67bbb9b0f7e0e8c9acc05dca739a9a2ceeeb13ceac471ea1f868ff75079f297f6208f3b04e5cc4c637e722ce033067d0bc929881e14d7aeeb0dfca0f9192cc408327e96233414be6f36be530bf5fc589aed84f7a078fca065ae5895b40fbebaaaa434e0c04c28cd532e8df0a5bbe02bc1e49e6ea9eb7375ab558417a44d218f20a64519618eec771cb7eee3b74062309a47b9ee2a424f23425db4786616aacbfe7dfa5a4114221e95524be1dc47702216d79653456aa88f0cf91f1887586bd6af78ec97a75c48d24f91973c72" type="audio/mpeg" />
-        Your browser does not support the audio element.
-        </div>
-    <div class="bg-black rounded-lg shadow-lg p-2 mb-4 rainbow-border">
-      <div class="mb-2">
-        <h2 class="text-lg font-bold">NST #12 ( tino ) </h2>
-      </div>
-      <audio class="w-full" controls>
-        <source src="https://storage.googleapis.com/kagglesdsdata/datasets/6618770/10693649/5_6129752139162981877.mp3?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=gcp-kaggle-com%40kaggle-161607.iam.gserviceaccount.com%2F20250208%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250208T081006Z&X-Goog-Expires=259200&X-Goog-SignedHeaders=host&X-Goog-Signature=2b5637e36738b528b2c728c16d4cdde246d5004650fe16d2a16995b8ed970d52c7e2632e9bc17ede81e588b28b0317d245f83fce5da9843e8e893aafd4c5533be6554e52c2b81e85c6ab726d8a6ecbe8d3f9c911822a2542e06351f135fb097172e0c76105216cd7f9a9e47df10c5aa1ca9ad7b9ed60c5768b8cd365a60cd590ff8ea90b963f25ce2706b406449b286cba91bf1c2b067ad66e9701dcd140543f066a1a7701093ad4faf350f2b4572975fe2fa05a0aa84318218dcb3ae8305d4119f5b7c53940ef7b6b1b530753bfe52b6acb4c70a644076e7ef4cf917f709767c414a612ea89d19d45188240cd933678baffae247eafc92c31851d503e6aecd4" type="audio/mpeg" />
-        Your browser does not support the audio element.
-        </div>
-    <div class="bg-black rounded-lg shadow-lg p-2 mb-4 rainbow-border">
-      <div class="mb-2">
-        <h2 class="text-lg font-bold">KIT KIT KIT - DJ TUSO</h2>
-      </div>
-      <audio class="w-full" controls>
-        <source src="https://storage.googleapis.com/kagglesdsdata/datasets/6618770/10700019/5_6152345415191628545.wav?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=gcp-kaggle-com%40kaggle-161607.iam.gserviceaccount.com%2F20250209%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250209T044720Z&X-Goog-Expires=259200&X-Goog-SignedHeaders=host&X-Goog-Signature=43b8783b0b4af185135935f9c87ef0d1b9ebf4128e6bece26458f5748905b452075f3bd43b4e6df93c3773178601b4c30696904159894086340ea60aa29a7b6292dd483c711a72c1fb445cc3307e73ebf459ab24453148d7c064b69591135e454cadfa0b81da246cc8ff75b50a8dbf843ab0bd7aaf02194fc1891c90ce256e7d98cbc6984722063e79bc3336927934aaf5f839c1bd9a614711558fa203dbe4f61b420caf0b3a8bfd9b2cbab1275ec5eb5c870f8a0595ff3712bebffd8e93fc278db09e328bf9ab5ddfd7d1e9f05bdd3efba01fc903234ceb29367837ded213483006443ed8ba4d72f3b9be52d7aba48df7ea3eee67c6d853827130e6f13d17ae" type="audio/mpeg" />
-        Your browser does not support the audio element.
-        </div>
-    <div class="bg-black rounded-lg shadow-lg p-2 mb-4 rainbow-border">
-      <div class="mb-2">
-        <h2 class="rainbow-text">NST #13</h2>
-      </div>
-      <audio class="w-full" controls>
-        <source src="https://storage.googleapis.com/kagglesdsdata/datasets/6618770/10700382/5_6170103833650270997.mp3?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=gcp-kaggle-com%40kaggle-161607.iam.gserviceaccount.com%2F20250209%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250209T060205Z&X-Goog-Expires=259200&X-Goog-SignedHeaders=host&X-Goog-Signature=b06121af2dfdf616bfd77a1ff34e40e6fcc70013de5f96aa4915a2fbca5ba99cd10821ef799f4ccaecef6c0d416a8201ecaba059c6c605a384f2c7e1810c052cfe9c1dd408f9824c93d30c7ff72e16af04fffe228d78a931ea91af0180d9d6ceb5d38b77c76c104971c4d13fd3c51c24fc83d55f42216fcd7d89b9ddae4c4da853fed352d7350a2308926c3862378115248c710614c764a34a22659ecb8070f6cc86eeb864d2acd7d4e66ce4699f87cc799e0b2f05ff5448ce2c618864dc34c922bdd351b377d0a3d3fdf5a90ee22474122030995651d28c3b1ea7af98afca6e0355a4dbf6b9b0d1ab3feb6821349b63a159be6a1e9e776d5d01e171f6770a3e" type="audio/mpeg" />
-        Your browser does not support the audio element.
         
-  
 
-    <!-- Footer -->
-
-   <script src="scripts.js"></script>
-  </div>
 </body>
 </html>
