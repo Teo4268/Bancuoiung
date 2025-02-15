@@ -88,13 +88,8 @@ body {
     100% { color: red; }
 }
 
-@keyframes moveText {
-    0%, 100% { transform: translateX(0); }
-    50% { transform: translateX(200px); }
-}
-
-.moving-text {
-    font-size: 40px;
+.rainbow-text2 {
+    font-size: 20px; /* Chữ nhỏ hơn */
     font-weight: bold;
-    animation: rainbow 3s infinite linear, moveText 4s infinite alternate ease-in-out;
+    animation: rainbow 3s infinite linear;
 }
