@@ -90,14 +90,3 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-window.addEventListener("beforeunload", () => {
-  localStorage.setItem("lastSongIndex", currentSongIndex);
-});
-
-window.addEventListener("DOMContentLoaded", () => {
-  let savedIndex = localStorage.getItem("lastSongIndex");
-  if (savedIndex !== null) {
-    currentSongIndex = parseInt(savedIndex);
-    playSong(currentSongIndex);
-  }
-});
