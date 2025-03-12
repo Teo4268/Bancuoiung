@@ -89,4 +89,23 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll("audio").forEach(a => a.volume = e.target.value);
   });
 });
+document.addEventListener("DOMContentLoaded", function () {
+  let popup = document.getElementById("popup");
+
+  // Kiểm tra nếu popup chưa bị đóng trước đó
+  if (!localStorage.getItem("popupClosed")) {
+    popup.classList.add("show"); // Hiện popup với hiệu ứng
+  }
+});
+
+function closePopup() {
+  let popup = document.getElementById("popup");
+  popup.classList.remove("show"); // Ẩn popup với hiệu ứng fade-out
+
+  setTimeout(() => {
+    popup.style.display = "none"; // Ẩn hoàn toàn sau khi hiệu ứng chạy xong
+  }, 500);
+
+  localStorage.setItem("popupClosed", "true"); // Ghi nhớ trạng thái đã đóng
+}
 
