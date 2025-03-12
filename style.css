@@ -127,6 +127,8 @@ body {
   box-shadow: 0px 0px 10px white;
   transform: scale(0.8);
   transition: transform 0.3s ease-in-out;
+  width: 80%;
+  max-width: 400px;
 }
 
 /* Khi popup hiển thị, nội dung phóng to nhẹ */
@@ -134,10 +136,37 @@ body {
   transform: scale(1);
 }
 
+/* Khu vực update log có thể cuộn */
+.popup-log {
+  background: #222;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid white;
+  max-height: 150px;
+  overflow-y: auto;
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Tùy chỉnh thanh cuộn */
+.popup-log::-webkit-scrollbar {
+  width: 6px;
+}
+
+.popup-log::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.popup-log::-webkit-scrollbar-track {
+  background: #333;
+}
+
 /* Nút đóng */
 .popup button {
   margin-top: 10px;
-  padding: 10px 20px;
+  padding: 5px 10px;
   background: white;
   color: black;
   border: none;
@@ -145,6 +174,7 @@ body {
   font-weight: bold;
   border-radius: 5px;
   transition: background 0.3s ease-in-out, transform 0.2s;
+  font-size: 18px;
 }
 
 /* Hiệu ứng hover khi rê chuột vào nút đóng */
