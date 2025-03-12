@@ -100,7 +100,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.8);
+  background: #1a1a1a;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -118,7 +118,7 @@ body {
 
 /* Hộp nội dung popup */
 .popup-content {
-  background: black;
+  background: #1a1a1a;
   color: white;
   padding: 20px;
   border-radius: 8px;
