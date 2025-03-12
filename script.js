@@ -92,10 +92,10 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
   let popup = document.getElementById("popup");
 
-  // Kiểm tra nếu popup chưa bị đóng trước đó
-  if (!localStorage.getItem("popupClosed")) {
+  // Hiển thị popup mỗi lần tải lại trang
+  setTimeout(() => {
     popup.classList.add("show"); // Hiện popup với hiệu ứng
-  }
+  }, 1000); // Delay 1 giây trước khi xuất hiện
 });
 
 function closePopup() {
@@ -103,9 +103,6 @@ function closePopup() {
   popup.classList.remove("show"); // Ẩn popup với hiệu ứng fade-out
 
   setTimeout(() => {
-    popup.style.display = "none"; // Ẩn hoàn toàn sau khi hiệu ứng chạy xong
+    popup.style.display = "none"; // Ẩn hoàn toàn sau khi hiệu ứng chạy xo
   }, 500);
-
-  localStorage.setItem("popupClosed", "true"); // Ghi nhớ trạng thái đã đóng
 }
-
