@@ -118,3 +118,33 @@ document.addEventListener("DOMContentLoaded", function () {
     
     document.body.appendChild(iframe);
 });
+songs.forEach((song, index) => {
+    const audio = song.querySelector("audio");
+    const progressBar = song.querySelector(".progress-bar");
+    const progress = song.querySelector(".progress");
+    
+    let isDragging = false;
+
+    progressBar.addEventListener("mousedown", (e) => {
+      isDragging = true;
+      updateProgress(e);
+    });
+
+    document.addEventListener("mousemove", (e) => {
+      if (isDragging) {
+        updateProgress(e);
+      }
+    });
+
+    document.addEventListener("mouseup", () => {
+      isDragging = false;
+    });
+
+    function updateProgress(e) {
+      const rect = progressBar.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const newTime = (clickX / rect.width) * audio.duration;
+      audio.currentTime = newTime;
+      progress.style.width = (audio.currentTime / audio.duration) * 100 + "%";
+    }
+  });
