@@ -119,32 +119,42 @@ document.addEventListener("DOMContentLoaded", function () {
     document.body.appendChild(iframe);
 });
 songs.forEach((song, index) => {
-    const audio = song.querySelector("audio");
-    const progressBar = song.querySelector(".progress-bar");
-    const progress = song.querySelector(".progress");
-    
-    let isDragging = false;
+  const audio = song.querySelector("audio");
+  const progressBar = song.querySelector(".progress-bar");
+  const progress = song.querySelector(".progress");
+  
+  let isDragging = false;
 
-    progressBar.addEventListener("mousedown", (e) => {
-      isDragging = true;
-      updateProgress(e);
-    });
+  function updateProgress(clientX) {
+    const rect = progressBar.getBoundingClientRect();
+    const clickX = clientX - rect.left;
+    const newTime = (clickX / rect.width) * audio.duration;
+    audio.currentTime = newTime;
+    progress.style.width = (audio.currentTime / audio.duration) * 100 + "%";
+  }
 
-    document.addEventListener("mousemove", (e) => {
-      if (isDragging) {
-        updateProgress(e);
-      }
-    });
+  function startDrag(e) {
+    isDragging = true;
+    updateProgress(e.clientX || e.touches[0].clientX);
+  }
 
-    document.addEventListener("mouseup", () => {
-      isDragging = false;
-    });
-
-    function updateProgress(e) {
-      const rect = progressBar.getBoundingClientRect();
-      const clickX = e.clientX - rect.left;
-      const newTime = (clickX / rect.width) * audio.duration;
-      audio.currentTime = newTime;
-      progress.style.width = (audio.currentTime / audio.duration) * 100 + "%";
+  function moveDrag(e) {
+    if (isDragging) {
+      updateProgress(e.clientX || e.touches[0].clientX);
     }
-  });
+  }
+
+  function stopDrag() {
+    isDragging = false;
+  }
+
+  // Sự kiện cho chuột
+  progressBar.addEventListener("mousedown", startDrag);
+  document.addEventListener("mousemove", moveDrag);
+  document.addEventListener("mouseup", stopDrag);
+
+  // Sự kiện cho cảm ứng (mobile)
+  progressBar.addEventListener("touchstart", startDrag);
+  document.addEventListener("touchmove", moveDrag);
+  document.addEventListener("touchend", stopDrag);
+});
