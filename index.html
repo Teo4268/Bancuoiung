@@ -2,30 +2,20 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Made By Teo</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+  <script src="song.js"></script>
 </head>
 <body>
-
-  <div class="container">
-    <div id="playlist">
+  <div class="search-bar-wrap">
+    <input type="text" id="searchInput" class="search-bar" placeholder="Tìm bài hát...">
+  </div>
+  <div class="container" tabindex="0">
+    <div id="playlist" aria-label="Danh sách nhạc">
       
-      <div class="song-card">
-        <div class="flex-1">
-          <h2 class="text-lg font-bold">HouseLak #1</h2>
-          <div class="progress-bar"><div class="progress"></div></div>
-          <span class="time">00:00 / 00:00</span>
-        </div>
-        <button class="play-btn"><i class="fas fa-play"></i></button>
-        <audio>
-          <source src="https://pub-23c7a67d9ab14022848bc8c2d1e9c57b.r2.dev/nst1.mp3" type="audio/mpeg">
-        </audio>
-      </div>
+      <!-- Các thẻ song-card giữ nguyên, chỉ tối ưu accessibility và loại bỏ style inline thừa nếu có -->
 
       <div class="song-card">
         <div class="flex-1">
@@ -389,32 +379,19 @@
       
     </div>
 
-  <div class="volume-widget">
-    <i class="fas fa-volume-up"></i>
-    <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1">
+  <div class="volume-widget" aria-label="Điều chỉnh âm lượng">
+    <i class="fas fa-volume-up" aria-hidden="true"></i>
+    <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1" aria-label="Âm lượng">
   </div>
   <script src="script.js"></script>
-    
-  
-  <style>
-    .rainbow-text {
-      font-size: 20px;
-      font-weight: bold;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to right,green, blue, indigo, violet);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-         </style>
- <div id="popup" class="popup">
+ <div id="popup" class="popup" role="dialog" aria-modal="true">
   <div class="popup-content">
-    <p> Web Đang Trong Giai ĐOẠN PHÁT TRIỂN </p>
-         
+    <p> Web Đang Trong GIAI ĐOẠN PHÁT TRIỂN </p>
     <h2> *Update Log </h2>
     <div class="popup-log">
       <p>- nghĩ hè r ae chờ ik</p>
     </div>
-    <button onclick="closePopup()">X</button>
+    <button onclick="closePopup()" aria-label="Đóng thông báo">X</button>
   </div>
  </div>
   

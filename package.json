@@ -1,0 +1,14 @@
+{
+  "name": "bancuoiung-web-demo",
+  "version": "1.0.0",
+  "description": "Demo web chạy nhạc với hiệu ứng đẹp",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve ."
+  },
+  "keywords": ["web", "music", "demo", "html", "css", "js"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {}
+}
