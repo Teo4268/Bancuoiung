@@ -1,6 +1,23 @@
 
 // Import songs từ song.js (phải đảm bảo file song.js được load trước script.js trong index.html)
 document.addEventListener("DOMContentLoaded", function () {
+  // Tab chuyển ngăn
+  const tabNonstop = document.getElementById('tab-nonstop');
+  const tabHouselak = document.getElementById('tab-houselak');
+  const colNonstop = document.getElementById('playlist-nonstop-col');
+  const colHouselak = document.getElementById('playlist-houselak-col');
+  tabNonstop.addEventListener('click', () => {
+    tabNonstop.classList.add('active');
+    tabHouselak.classList.remove('active');
+    colNonstop.style.display = '';
+    colHouselak.style.display = 'none';
+  });
+  tabHouselak.addEventListener('click', () => {
+    tabHouselak.classList.add('active');
+    tabNonstop.classList.remove('active');
+    colHouselak.style.display = '';
+    colNonstop.style.display = 'none';
+  });
   // Tìm kiếm bài hát nâng cao
   const searchInput = document.getElementById('searchInput');
   let notFoundMsg = null;
@@ -8,8 +25,11 @@ document.addEventListener("DOMContentLoaded", function () {
     notFoundMsg = document.createElement('div');
     notFoundMsg.textContent = 'Không tìm thấy bài hát.';
     notFoundMsg.style.cssText = 'color:#bbb;text-align:center;padding:16px 0;display:none;font-size:1.1rem;';
-    const playlist = document.getElementById('playlist');
-    playlist.parentNode.insertBefore(notFoundMsg, playlist);
+    // Đặt thông báo vào trước danh sách Nonstop (nếu có)
+    const playlistNonstop = document.getElementById('playlist-nonstop');
+    if (playlistNonstop && playlistNonstop.parentNode) {
+      playlistNonstop.parentNode.insertBefore(notFoundMsg, playlistNonstop);
+    }
     searchInput.addEventListener('input', function() {
       const keyword = this.value.trim().toLowerCase();
       const cards = document.querySelectorAll('.song-card');
@@ -32,15 +52,29 @@ document.addEventListener("DOMContentLoaded", function () {
     console.error('Không tìm thấy danh sách bài hát!');
     return;
   }
-  const playlist = document.getElementById("playlist");
+  const playlistNonstop = document.getElementById("playlist-nonstop");
+  const playlistHouselak = document.getElementById("playlist-houselak");
   const volumeSlider = document.querySelector(".volume-slider");
   const popup = document.getElementById("popup");
   let currentSongIndex = 0;
-  // Tạo HTML cho từng bài hát
-  playlist.innerHTML = songs.map((song, idx) => `
-    <div class="song-card" data-idx="${idx}">
+
+
+  // Phân loại bài hát và giữ thứ tự gốc
+  const nonstopSongs = [];
+  const houselakSongs = [];
+  songs.forEach((s, i) => {
+    if (/^\s*nst\s*#?\d+/i.test(s.title)) {
+      nonstopSongs.push({ ...s, originalIndex: i });
+    } else if (/^\s*houselak\s*#?\d+/i.test(s.title)) {
+      houselakSongs.push({ ...s, originalIndex: i });
+    }
+  });
+
+  // Tạo HTML cho từng nhóm, giữ nguyên tên bài hát gốc
+  playlistNonstop.innerHTML = nonstopSongs.map((song, idx) => `
+    <div class="song-card" data-idx="${song.originalIndex}" data-group="nonstop">
       <div class="flex-1">
-        <h2 class="text-lg font-bold${song.rainbow ? ' rainbow-text2' : ''}">${song.title}</h2>
+        <h2 class="song-title${song.rainbow ? ' rainbow-text2' : ''}">${song.title}</h2>
         <div class="progress-bar"><div class="progress"></div></div>
         <span class="time">00:00 / 00:00</span>
       </div>
@@ -51,6 +85,22 @@ document.addEventListener("DOMContentLoaded", function () {
     </div>
   `).join("");
 
+  playlistHouselak.innerHTML = houselakSongs.map((song, idx) => `
+    <div class="song-card" data-idx="${song.originalIndex}" data-group="houselak">
+      <div class="flex-1">
+        <h2 class="song-title${song.rainbow ? ' rainbow-text2' : ''}">${song.title}</h2>
+        <div class="progress-bar"><div class="progress"></div></div>
+        <span class="time">00:00 / 00:00</span>
+      </div>
+      <button class="play-btn"><i class="fas fa-play"></i></button>
+      <audio>
+        <source src="${song.src}" type="audio/mpeg">
+      </audio>
+    </div>
+  `).join("");
+
+
+  // Gom lại tất cả song-card để xử lý play/pause chung
   const songCards = document.querySelectorAll(".song-card");
 
   function formatTime(seconds) {
