@@ -196,6 +196,8 @@ body {
 }
 
 .player-song-info {
+  display: flex;
+  flex-direction: column;
   text-align: left;
   white-space: nowrap;
   overflow: hidden;
@@ -420,10 +422,13 @@ body {
 }
 
 footer {
-  text-align: center;
-  padding: 20px;
-  margin-top: 40px;
+  padding: 0;
   color: var(--text-secondary-color);
+  font-size: 0.7rem;
+}
+footer p {
+  margin: 0;
+  text-align: left;
 }
 
 /* --- INTRO SCREEN --- */
@@ -471,6 +476,28 @@ footer {
 }
 
 @media (max-width: 768px) {
+  .player-bar {
+    height: auto;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 10px 15px;
+  }
+  .player-song-info {
+      grid-row: 1;
+      text-align: center;
+  }
+  .player-song-info footer p {
+      text-align: center;
+  }
+  .player-main-controls {
+      grid-row: 2;
+  }
+  .player-volume-section {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+  }
+
   body {
     padding-bottom: 150px;
   }
@@ -484,28 +511,4 @@ footer {
     grid-template-columns: 1fr;
   }
 
-  .player-bar {
-    grid-template-columns: 1fr;
-    height: auto;
-    padding: 15px;
-    gap: 10px;
-  }
-
-  .player-song-info {
-    grid-column: 1 / -1;
-    text-align: center;
-    margin-bottom: 10px;
-  }
-
-  .player-main-controls {
-    grid-column: 1 / -1;
-    order: 2;
-    width: 100%;
-  }
-  
-  .player-volume-section {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-  }
 }
