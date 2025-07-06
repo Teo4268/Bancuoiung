@@ -19,18 +19,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
   setTimeout(() => {
     introScreen.classList.add('hidden');
-  }, 1500);
+  }, 1000);
 
   const songs = [...nonstopSongs, ...houselakSongs];
   // Global player elements
   const audio = new Audio();
   let currentSongIndex = -1;
+  let previousState = null;
   let allSongCards = [];
   let isDragging = false;
   let isShuffle = false;
   let repeatMode = 'none'; // 'none', 'one', 'all'
 
   // Player bar elements
+  const undoBtn = document.getElementById('undo-btn');
   const playPauseBtn = document.getElementById('play-pause-btn');
   const nextBtn = document.getElementById('next-btn');
   const prevBtn = document.getElementById('prev-btn');
@@ -58,6 +60,48 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // --- FUNCTIONS ---
 
+  function saveState() {
+    if (currentSongIndex !== -1) {
+      const state = {
+        songIndex: currentSongIndex,
+        currentTime: audio.currentTime,
+        volume: audio.volume,
+        isShuffle: isShuffle,
+        repeatMode: repeatMode
+      };
+      localStorage.setItem('musicPlayerState', JSON.stringify(state));
+    }
+  }
+
+  function loadState() {
+    const savedState = localStorage.getItem('musicPlayerState');
+    if (savedState) {
+      const state = JSON.parse(savedState);
+      currentSongIndex = state.songIndex;
+      audio.src = songs[currentSongIndex].src;
+      audio.currentTime = state.currentTime;
+      audio.volume = state.volume || 1;
+      volumeSlider.value = state.volume || 1;
+      isShuffle = state.isShuffle || false;
+      shuffleBtn.classList.toggle('active', isShuffle);
+      repeatMode = state.repeatMode || 'none';
+      // Update repeat button UI based on loaded state
+      if (repeatMode === 'all') {
+        repeatBtn.classList.add('active');
+        repeatBtn.innerHTML = '<i class="fas fa-redo-alt"></i>';
+      } else if (repeatMode === 'one') {
+        repeatBtn.classList.add('active');
+        repeatBtn.innerHTML = '<i class="fas fa-retweet"></i>';
+      }
+
+      playerSongTitle.textContent = songs[currentSongIndex].title;
+      document.title = songs[currentSongIndex].title + ' - Made By Teo';
+      allSongCards.forEach(card => {
+        card.classList.toggle('playing', parseInt(card.dataset.idx) === currentSongIndex);
+      });
+    }
+  }
+
   function formatTime(seconds) {
     if (isNaN(seconds)) return '0:00';
     const h = Math.floor(seconds / 3600);
@@ -77,12 +121,23 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  function loadSong(songIndex) {
+  function loadSong(songIndex, restoreTime = 0) {
     if (songIndex < 0 || songIndex >= songs.length) return;
+
+    // Save previous state before changing song
+    if (currentSongIndex !== -1 && songIndex !== currentSongIndex) {
+        previousState = {
+            songIndex: currentSongIndex,
+            currentTime: audio.currentTime
+        };
+        undoBtn.style.opacity = '1';
+        undoBtn.style.pointerEvents = 'auto';
+    }
     
     const song = songs[songIndex];
     currentSongIndex = songIndex;
     audio.src = song.src;
+    audio.currentTime = restoreTime;
     playerSongTitle.textContent = song.title;
     document.title = song.title + ' - Made By Teo';
 
@@ -145,6 +200,18 @@ document.addEventListener("DOMContentLoaded", function () {
   // --- EVENT LISTENERS ---
 
   // Player bar controls
+  undoBtn.style.opacity = '0.5';
+  undoBtn.style.pointerEvents = 'none';
+  undoBtn.addEventListener('click', () => {
+    if (previousState) {
+        const { songIndex, currentTime } = previousState;
+        previousState = null; // Use only once
+        undoBtn.style.opacity = '0.5';
+        undoBtn.style.pointerEvents = 'none';
+        loadSong(songIndex, currentTime);
+    }
+  });
+
   playPauseBtn.addEventListener('click', () => {
     if (currentSongIndex === -1) {
       const rainbowSongIndex = songs.findIndex(song => song.rainbow);
@@ -179,7 +246,13 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Audio element events
-  audio.addEventListener('timeupdate', updateProgress);
+  audio.addEventListener('timeupdate', () => {
+    updateProgress();
+    // Save state periodically
+    if (audio.currentTime > 0 && audio.currentTime % 5 < 0.1) {
+        saveState();
+    }
+  });
   audio.addEventListener('loadedmetadata', () => {
     durationEl.textContent = formatTime(audio.duration);
     updateProgress();
@@ -337,6 +410,12 @@ document.addEventListener("DOMContentLoaded", function () {
   setTimeout(() => {
     if (popup) popup.classList.add("show");
   }, 1000);
+
+  // Load state on page load
+  loadState();
+
+  // Save state before leaving
+  window.addEventListener('beforeunload', saveState);
 });
 
 // Global function for popup

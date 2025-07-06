@@ -352,7 +352,7 @@ body {
 .popup-content {
   background: var(--card-color);
   color: var(--text-color);
-  padding: 30px;
+  padding: 15px 20px;
   border-radius: 12px;
   border: 1px solid #282828;
   text-align: center;
@@ -360,7 +360,7 @@ body {
   transform: scale(0.9);
   transition: transform 0.3s ease;
   width: 90%;
-  max-width: 400px;
+  max-width: 360px;
 }
 
 .popup.show .popup-content {
