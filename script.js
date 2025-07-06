@@ -1,45 +1,303 @@
-
-// Import songs từ song.js (phải đảm bảo file song.js được load trước script.js trong index.html)
 document.addEventListener("DOMContentLoaded", function () {
-  // Tab chuyển ngăn
+  const songs = [...nonstopSongs, ...houselakSongs];
+  // Global player elements
+  const audio = new Audio();
+  let currentSongIndex = -1;
+  let allSongCards = [];
+  let isDragging = false;
+  let isShuffle = false;
+  let repeatMode = 'none'; // 'none', 'one', 'all'
+
+  // Player bar elements
+  const playPauseBtn = document.getElementById('play-pause-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const prevBtn = document.getElementById('prev-btn');
+  const repeatBtn = document.getElementById('repeat-btn');
+  const shuffleBtn = document.getElementById('shuffle-btn');
+  const playerSongTitle = document.querySelector('.player-song-title');
+  const playerProgressBar = document.querySelector('.player-progress-bar');
+  const playerProgress = document.querySelector('.player-progress');
+  const currentTimeEl = document.querySelector('.player-time-current');
+  const durationEl = document.querySelector('.player-time-duration');
+  const volumeBtn = document.getElementById('volume-btn');
+  const volumePopup = document.querySelector('.volume-popup');
+  const volumeSlider = document.querySelector('.volume-slider');
+  const volumeSection = document.querySelector('.player-volume-section');
+
+  // Other elements
+  const searchInput = document.getElementById('searchInput');
+  const popup = document.getElementById("popup");
   const tabNonstop = document.getElementById('tab-nonstop');
   const tabHouselak = document.getElementById('tab-houselak');
   const colNonstop = document.getElementById('playlist-nonstop-col');
   const colHouselak = document.getElementById('playlist-houselak-col');
-  tabNonstop.addEventListener('click', () => {
-    tabNonstop.classList.add('active');
-    tabHouselak.classList.remove('active');
-    colNonstop.style.display = '';
-    colHouselak.style.display = 'none';
+  const playlistNonstopEl = document.getElementById("playlist-nonstop");
+  const playlistHouselakEl = document.getElementById("playlist-houselak");
+
+  // --- FUNCTIONS ---
+
+  function formatTime(seconds) {
+    if (isNaN(seconds)) return '0:00';
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = Math.floor(seconds % 60);
+    if (h > 0) {
+      return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    }
+    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  }
+
+  function updateProgress() {
+    if (audio.duration) {
+      const percent = (audio.currentTime / audio.duration) * 100;
+      playerProgress.style.width = percent + "%";
+      currentTimeEl.textContent = formatTime(audio.currentTime);
+    }
+  }
+
+  function loadSong(songIndex) {
+    if (songIndex < 0 || songIndex >= songs.length) return;
+    
+    const song = songs[songIndex];
+    currentSongIndex = songIndex;
+    audio.src = song.src;
+    playerSongTitle.textContent = song.title;
+    document.title = song.title + ' - Made By Teo';
+
+    allSongCards.forEach(card => {
+      card.classList.toggle('playing', parseInt(card.dataset.idx) === songIndex);
+    });
+    
+    playCurrentSong();
+  }
+
+  function playCurrentSong() {
+    audio.play();
+    playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+  }
+
+  function pauseCurrentSong() {
+    audio.pause();
+    playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+  }
+
+  function playNext() {
+    if (isShuffle) {
+      let nextIndex;
+      do {
+        nextIndex = Math.floor(Math.random() * songs.length);
+      } while (nextIndex === currentSongIndex);
+      loadSong(nextIndex);
+    } else {
+      loadSong((currentSongIndex + 1) % songs.length);
+    }
+  }
+
+  function playPrev() {
+    loadSong((currentSongIndex - 1 + songs.length) % songs.length);
+  }
+
+  // --- PLAYLIST & CARD GENERATION ---
+
+  function createSongCard(song, originalIndex) {
+    return `
+      <div class="song-card" data-idx="${originalIndex}">
+        <h2 class="song-title${song.rainbow ? ' rainbow-text2' : ''}">${song.title}</h2>
+        <i class="fas fa-play play-btn-icon"></i>
+      </div>
+    `;
+  }
+
+  const nonstopSongsHtml = songs.map((s, i) => (s.category === 'nonstop' ? createSongCard(s, i) : '')).join("");
+  const houselakSongsHtml = songs.map((s, i) => (s.category === 'houselak' ? createSongCard(s, i) : '')).join("");
+
+  playlistNonstopEl.innerHTML = nonstopSongsHtml;
+  playlistHouselakEl.innerHTML = houselakSongsHtml;
+  
+  allSongCards = document.querySelectorAll(".song-card");
+
+  // --- EVENT LISTENERS ---
+
+  // Player bar controls
+  playPauseBtn.addEventListener('click', () => {
+    if (currentSongIndex === -1) {
+      const rainbowSongIndex = songs.findIndex(song => song.rainbow);
+      if (rainbowSongIndex !== -1) {
+        loadSong(rainbowSongIndex);
+      } else {
+        loadSong(0); // Fallback to the first song
+      }
+    } else {
+      audio.paused ? playCurrentSong() : pauseCurrentSong();
+    }
   });
-  tabHouselak.addEventListener('click', () => {
-    tabHouselak.classList.add('active');
-    tabNonstop.classList.remove('active');
-    colHouselak.style.display = '';
-    colNonstop.style.display = 'none';
+  nextBtn.addEventListener('click', playNext);
+  prevBtn.addEventListener('click', playPrev);
+  shuffleBtn.addEventListener('click', () => {
+    isShuffle = !isShuffle;
+    shuffleBtn.classList.toggle('active', isShuffle);
   });
-  // Tìm kiếm bài hát nâng cao
-  const searchInput = document.getElementById('searchInput');
+  repeatBtn.addEventListener('click', () => {
+    if (repeatMode === 'none') {
+      repeatMode = 'all';
+      repeatBtn.classList.add('active');
+      repeatBtn.innerHTML = '<i class="fas fa-redo-alt"></i>'; // Icon for repeat all
+    } else if (repeatMode === 'all') {
+      repeatMode = 'one';
+      repeatBtn.innerHTML = '<i class="fas fa-retweet"></i>'; // Icon for repeat one
+    } else {
+      repeatMode = 'none';
+      repeatBtn.classList.remove('active');
+      repeatBtn.innerHTML = '<i class="fas fa-redo"></i>';
+    }
+  });
+
+  // Audio element events
+  audio.addEventListener('timeupdate', updateProgress);
+  audio.addEventListener('loadedmetadata', () => {
+    durationEl.textContent = formatTime(audio.duration);
+    updateProgress();
+  });
+  audio.addEventListener('ended', () => {
+    if (repeatMode === 'one') {
+      loadSong(currentSongIndex);
+    } else if (repeatMode === 'all') {
+      playNext();
+    } else {
+      // 'none'
+      if (currentSongIndex < songs.length - 1) {
+        playNext();
+      } else {
+        pauseCurrentSong();
+      }
+    }
+  });
+
+  // Progress bar seeking (smooth scrubbing)
+  function scrub(e) {
+    const rect = playerProgressBar.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const width = rect.width;
+    const percent = Math.min(100, Math.max(0, (clickX / width) * 100));
+    playerProgress.style.width = percent + "%";
+    const newTime = (clickX / width) * audio.duration;
+    if (newTime >= 0 && newTime <= audio.duration) {
+        audio.currentTime = newTime;
+        currentTimeEl.textContent = formatTime(newTime);
+    }
+  }
+  playerProgressBar.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    scrub(e);
+  });
+  document.addEventListener('mousemove', (e) => {
+    if (isDragging) {
+      scrub(e);
+    }
+  });
+  document.addEventListener('mouseup', () => {
+    isDragging = false;
+  });
+
+  // Volume control
+  volumeBtn.addEventListener('click', (e) => {
+    e.stopPropagation(); // Prevent this click from immediately closing the popup
+    volumePopup.classList.toggle('visible');
+  });
+
+  // Hide popup when clicking anywhere else
+  document.addEventListener('click', (e) => {
+    if (!volumeSection.contains(e.target) && volumePopup.classList.contains('visible')) {
+      volumePopup.classList.remove('visible');
+    }
+  });
+
+  // Prevent clicks inside the popup from closing it
+  volumePopup.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+
+  volumeSlider.addEventListener('input', (e) => {
+    audio.volume = e.target.value;
+    // Also update the icon based on volume
+    const icon = volumeBtn.querySelector('i');
+    if (audio.volume > 0.5) {
+        icon.className = 'fas fa-volume-up';
+    } else if (audio.volume > 0) {
+        icon.className = 'fas fa-volume-down';
+    } else {
+        icon.className = 'fas fa-volume-mute';
+    }
+  });
+
+
+  // Song card clicks
+  allSongCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const songIndex = parseInt(card.dataset.idx);
+      loadSong(songIndex);
+    });
+  });
+
+  // Tab switching
+  const highlighter = document.querySelector('.active-tab-highlighter');
+  const tabs = document.querySelectorAll('.playlist-tab');
+  const scrollPositions = { nonstop: 0, houselak: 0 };
+  let activeTab = 'nonstop';
+
+  function moveHighlighter(tab) {
+    highlighter.style.width = `${tab.offsetWidth}px`;
+    highlighter.style.height = `${tab.offsetHeight}px`;
+    highlighter.style.transform = `translateX(${tab.offsetLeft}px)`;
+  }
+
+  function switchTab(newTab) {
+    if (activeTab === newTab) return;
+
+    // Save current scroll position
+    scrollPositions[activeTab] = window.scrollY || document.documentElement.scrollTop;
+
+    // Update active tab
+    activeTab = newTab;
+
+    // Update UI
+    tabs.forEach(t => t.classList.remove('active'));
+    const newActiveTab = document.getElementById(`tab-${newTab}`);
+    newActiveTab.classList.add('active');
+    moveHighlighter(newActiveTab);
+
+    colNonstop.classList.toggle('playlist-hidden', newTab !== 'nonstop');
+    colHouselak.classList.toggle('playlist-hidden', newTab !== 'houselak');
+
+    // Restore new tab's scroll position
+    window.scrollTo(0, scrollPositions[newTab]);
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const newTab = tab.id.replace('tab-', '');
+      switchTab(newTab);
+    });
+  });
+
+  // Initial highlighter position
+  moveHighlighter(document.querySelector('.playlist-tab.active'));
+
+  // Search
   let notFoundMsg = null;
   if (searchInput) {
     notFoundMsg = document.createElement('div');
     notFoundMsg.textContent = 'Không tìm thấy bài hát.';
     notFoundMsg.style.cssText = 'color:#bbb;text-align:center;padding:16px 0;display:none;font-size:1.1rem;';
-    // Đặt thông báo vào trước danh sách Nonstop (nếu có)
-    const playlistNonstop = document.getElementById('playlist-nonstop');
-    if (playlistNonstop && playlistNonstop.parentNode) {
-      playlistNonstop.parentNode.insertBefore(notFoundMsg, playlistNonstop);
-    }
+    playlistNonstopEl.parentNode.insertBefore(notFoundMsg, playlistNonstopEl);
+    
     searchInput.addEventListener('input', function() {
       const keyword = this.value.trim().toLowerCase();
-      const cards = document.querySelectorAll('.song-card');
       let found = 0;
-      cards.forEach(card => {
-        const title = card.querySelector('.song-title, h2');
-        const artist = card.getAttribute('data-artist') || '';
-        const text = (title ? title.textContent : '') + ' ' + artist;
-        if (text.toLowerCase().includes(keyword)) {
-          card.style.display = '';
+      allSongCards.forEach(card => {
+        const title = card.querySelector('.song-title').textContent.toLowerCase();
+        if (title.includes(keyword)) {
+          card.style.display = 'flex';
           found++;
         } else {
           card.style.display = 'none';
@@ -48,207 +306,14 @@ document.addEventListener("DOMContentLoaded", function () {
       notFoundMsg.style.display = found === 0 ? '' : 'none';
     });
   }
-  if (typeof songs === 'undefined' || !Array.isArray(songs)) {
-    console.error('Không tìm thấy danh sách bài hát!');
-    return;
-  }
-  const playlistNonstop = document.getElementById("playlist-nonstop");
-  const playlistHouselak = document.getElementById("playlist-houselak");
-  const volumeSlider = document.querySelector(".volume-slider");
-  const popup = document.getElementById("popup");
-  let currentSongIndex = 0;
 
-
-  // Phân loại bài hát và giữ thứ tự gốc
-  const nonstopSongs = [];
-  const houselakSongs = [];
-  songs.forEach((s, i) => {
-    if (/^\s*nst\s*#?\d+/i.test(s.title)) {
-      nonstopSongs.push({ ...s, originalIndex: i });
-    } else if (/^\s*houselak\s*#?\d+/i.test(s.title)) {
-      houselakSongs.push({ ...s, originalIndex: i });
-    }
-  });
-
-  // Tạo HTML cho từng nhóm, giữ nguyên tên bài hát gốc
-  playlistNonstop.innerHTML = nonstopSongs.map((song, idx) => `
-    <div class="song-card" data-idx="${song.originalIndex}" data-group="nonstop">
-      <div class="flex-1">
-        <h2 class="song-title${song.rainbow ? ' rainbow-text2' : ''}">${song.title}</h2>
-        <div class="progress-bar"><div class="progress"></div></div>
-        <span class="time">00:00 / 00:00</span>
-      </div>
-      <button class="play-btn"><i class="fas fa-play"></i></button>
-      <audio>
-        <source src="${song.src}" type="audio/mpeg">
-      </audio>
-    </div>
-  `).join("");
-
-  playlistHouselak.innerHTML = houselakSongs.map((song, idx) => `
-    <div class="song-card" data-idx="${song.originalIndex}" data-group="houselak">
-      <div class="flex-1">
-        <h2 class="song-title${song.rainbow ? ' rainbow-text2' : ''}">${song.title}</h2>
-        <div class="progress-bar"><div class="progress"></div></div>
-        <span class="time">00:00 / 00:00</span>
-      </div>
-      <button class="play-btn"><i class="fas fa-play"></i></button>
-      <audio>
-        <source src="${song.src}" type="audio/mpeg">
-      </audio>
-    </div>
-  `).join("");
-
-
-  // Gom lại tất cả song-card để xử lý play/pause chung
-  const songCards = document.querySelectorAll(".song-card");
-
-  function formatTime(seconds) {
-    let h = Math.floor(seconds / 3600);
-    let m = Math.floor((seconds % 3600) / 60);
-    let s = Math.floor(seconds % 60);
-    if (h > 0) {
-      return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-    } else {
-      return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-    }
-  }
-
-  function playSong(index) {
-    if (index < 0 || index >= songCards.length) return;
-    document.querySelectorAll("audio").forEach(a => a.pause());
-    document.querySelectorAll(".play-btn").forEach(btn => btn.innerHTML = '<i class="fas fa-play"></i>');
-    document.querySelectorAll(".song-card").forEach(card => card.classList.remove("playing"));
-    const song = songCards[index];
-    const playBtn = song.querySelector(".play-btn");
-    const audio = song.querySelector("audio");
-    currentSongIndex = index;
-    audio.play();
-    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-    song.classList.add("playing");
-    // Cuộn đến bài đang phát
-    setTimeout(() => {
-      song.scrollIntoView({behavior: 'smooth', block: 'center'});
-    }, 200);
-    // Đổi tiêu đề trang
-    const title = song.querySelector('.song-title, h2');
-    if (title) document.title = title.textContent + ' - Made By Teo';
-  }
-  // Phím tắt: space play/pause, trái/phải tua 5s
-  document.addEventListener('keydown', function(e) {
-    if (document.activeElement === searchInput) return;
-    const song = songCards[currentSongIndex];
-    const audio = song.querySelector('audio');
-    if (!audio) return;
-    if (e.code === 'Space') {
-      e.preventDefault();
-      if (audio.paused) playSong(currentSongIndex);
-      else audio.pause();
-    }
-    if (e.code === 'ArrowRight') {
-      audio.currentTime = Math.min(audio.duration, audio.currentTime + 5);
-    }
-    if (e.code === 'ArrowLeft') {
-      audio.currentTime = Math.max(0, audio.currentTime - 5);
-    }
-  });
-
-  songCards.forEach((song, index) => {
-    const playBtn = song.querySelector(".play-btn");
-    const audio = song.querySelector("audio");
-    const progressBar = song.querySelector(".progress-bar");
-    const progress = song.querySelector(".progress");
-    const timeDisplay = song.querySelector(".time");
-
-    function updateTotalDuration() {
-      if (!isNaN(audio.duration)) {
-        timeDisplay.textContent = `00:00 / ${formatTime(audio.duration)}`;
-      }
-    }
-    audio.addEventListener("loadedmetadata", updateTotalDuration);
-    if (audio.readyState >= 1) updateTotalDuration();
-
-    playBtn.addEventListener("click", () => {
-      if (audio.paused) {
-        playSong(index);
-      } else {
-        audio.pause();
-        playBtn.innerHTML = '<i class="fas fa-play"></i>';
-        song.classList.remove("playing");
-      }
-    });
-
-    audio.addEventListener("timeupdate", () => {
-      const percent = (audio.currentTime / audio.duration) * 100;
-      progress.style.width = percent + "%";
-      timeDisplay.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
-    });
-
-    progressBar.addEventListener("click", (e) => {
-      const rect = progressBar.getBoundingClientRect();
-      const clickX = e.clientX - rect.left;
-      const newTime = (clickX / rect.width) * audio.duration;
-      audio.currentTime = newTime;
-    });
-
-    audio.addEventListener("ended", () => {
-      let nextIndex = currentSongIndex + 1;
-      if (nextIndex >= songCards.length) nextIndex = 0;
-      playSong(nextIndex);
-    });
-
-    // Kéo tua chuột và cảm ứng
-    let isDragging = false;
-    function updateProgress(clientX) {
-      const rect = progressBar.getBoundingClientRect();
-      const clickX = clientX - rect.left;
-      const newTime = (clickX / rect.width) * audio.duration;
-      audio.currentTime = newTime;
-      progress.style.width = (audio.currentTime / audio.duration) * 100 + "%";
-    }
-    function startDrag(e) {
-      isDragging = true;
-      updateProgress(e.clientX || e.touches[0].clientX);
-    }
-    function moveDrag(e) {
-      if (isDragging) {
-        updateProgress(e.clientX || e.touches[0].clientX);
-      }
-    }
-    function stopDrag() {
-      isDragging = false;
-    }
-    progressBar.addEventListener("mousedown", startDrag);
-    document.addEventListener("mousemove", moveDrag);
-    document.addEventListener("mouseup", stopDrag);
-    progressBar.addEventListener("touchstart", startDrag);
-    document.addEventListener("touchmove", moveDrag);
-    document.addEventListener("touchend", stopDrag);
-  });
-
-  // Điều chỉnh âm lượng
-  volumeSlider.addEventListener("input", (e) => {
-    document.querySelectorAll("audio").forEach(a => a.volume = e.target.value);
-  });
-
-  // Hiện popup sau 1 giây
+  // Popup
   setTimeout(() => {
     if (popup) popup.classList.add("show");
   }, 1000);
-
-  // Iframe ẩn (ví dụ cho theo dõi)
-  const iframe = document.createElement("iframe");
-  iframe.style.position = "absolute";
-  iframe.style.width = "1px";
-  iframe.style.height = "1px";
-  iframe.style.opacity = "0";
-  iframe.style.pointerEvents = "none";
-  iframe.style.overflow = "hidden";
-  iframe.src = "https://anylystic.pages.dev";
-  document.body.appendChild(iframe);
 });
 
-// Hàm đóng popup
+// Global function for popup
 function closePopup() {
   let popup = document.getElementById("popup");
   if (popup) {
