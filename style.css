@@ -108,7 +108,7 @@ body {
 
 .playlist-hidden {
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateX(-30px);
   pointer-events: none;
   position: absolute;
 }
@@ -130,6 +130,15 @@ body {
   border: 1px solid #282828;
   cursor: pointer;
   position: relative;
+  animation: slide-in 0.5s forwards;
+  opacity: 0;
+}
+
+@keyframes slide-in {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .song-card:hover {

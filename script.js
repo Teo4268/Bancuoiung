@@ -1,37 +1,39 @@
 document.addEventListener("DOMContentLoaded", function () {
   const introScreen = document.getElementById('intro-screen');
-  const introGrid = document.querySelector('.intro-grid');
-  const gridSize = 10;
+  const popup = document.getElementById("popup");
+  const lastShown = localStorage.getItem('lastShown');
+  const now = new Date().getTime();
+  const tenMinutes = 10 * 60 * 1000;
 
-  for (let i = 0; i < gridSize * gridSize; i++) {
-    const item = document.createElement('div');
-    item.classList.add('grid-item');
-    item.style.animationDelay = `${Math.random() * 1}s`;
-    
-    // Gradient colors from the image
-    const colors = ['#a993ff', '#7b68ee', '#d8bfd8', '#dda0dd', '#da70d6'];
-    const randomColor = colors[Math.floor(Math.random() * colors.length)];
-    
-    item.style.backgroundColor = randomColor;
-    
-    introGrid.appendChild(item);
+  if (!lastShown || (now - lastShown > tenMinutes)) {
+    const introGrid = document.querySelector('.intro-grid');
+    const gridSize = 10;
+    for (let i = 0; i < gridSize * gridSize; i++) {
+      const item = document.createElement('div');
+      item.classList.add('grid-item');
+      item.style.animationDelay = `${Math.random() * 1}s`;
+      const colors = ['#a993ff', '#7b68ee', '#d8bfd8', '#dda0dd', '#da70d6'];
+      item.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      introGrid.appendChild(item);
+    }
+    setTimeout(() => { introScreen.classList.add('hidden'); }, 1000);
+    setTimeout(() => { if (popup) popup.classList.add("show"); }, 1500);
+    localStorage.setItem('lastShown', now);
+  } else {
+    introScreen.style.display = 'none';
+    popup.style.display = 'none';
   }
 
-  setTimeout(() => {
-    introScreen.classList.add('hidden');
-  }, 1000);
-
-  const songs = [...nonstopSongs, ...houselakSongs];
-  // Global player elements
   const audio = new Audio();
   let currentSongIndex = -1;
+  let activePlaylist = 'nonstop'; // 'nonstop' or 'houselak'
+  let currentPlaylistSongs = nonstopSongs;
   let previousState = null;
   let allSongCards = [];
   let isDragging = false;
   let isShuffle = false;
-  let repeatMode = 'none'; // 'none', 'one', 'all'
+  let repeatMode = 'none';
 
-  // Player bar elements
   const undoBtn = document.getElementById('undo-btn');
   const playPauseBtn = document.getElementById('play-pause-btn');
   const nextBtn = document.getElementById('next-btn');
@@ -47,10 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const volumePopup = document.querySelector('.volume-popup');
   const volumeSlider = document.querySelector('.volume-slider');
   const volumeSection = document.querySelector('.player-volume-section');
-
-  // Other elements
   const searchInput = document.getElementById('searchInput');
-  const popup = document.getElementById("popup");
   const tabNonstop = document.getElementById('tab-nonstop');
   const tabHouselak = document.getElementById('tab-houselak');
   const colNonstop = document.getElementById('playlist-nonstop-col');
@@ -58,12 +57,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const playlistNonstopEl = document.getElementById("playlist-nonstop");
   const playlistHouselakEl = document.getElementById("playlist-houselak");
 
-  // --- FUNCTIONS ---
-
   function saveState() {
     if (currentSongIndex !== -1) {
       const state = {
         songIndex: currentSongIndex,
+        activePlaylist: activePlaylist,
         currentTime: audio.currentTime,
         volume: audio.volume,
         isShuffle: isShuffle,
@@ -77,15 +75,24 @@ document.addEventListener("DOMContentLoaded", function () {
     const savedState = localStorage.getItem('musicPlayerState');
     if (savedState) {
       const state = JSON.parse(savedState);
+      activePlaylist = state.activePlaylist || 'nonstop';
+      switchTab(activePlaylist, true); // Switch tab without saving scroll pos
+      
       currentSongIndex = state.songIndex;
-      audio.src = songs[currentSongIndex].src;
-      audio.currentTime = state.currentTime;
+      const song = currentPlaylistSongs[currentSongIndex];
+      if(song) {
+        audio.src = song.src;
+        audio.currentTime = state.currentTime;
+        playerSongTitle.textContent = song.title;
+        document.title = song.title + ' - Made By Teo';
+        updatePlayingClass();
+      }
+
       audio.volume = state.volume || 1;
       volumeSlider.value = state.volume || 1;
       isShuffle = state.isShuffle || false;
       shuffleBtn.classList.toggle('active', isShuffle);
       repeatMode = state.repeatMode || 'none';
-      // Update repeat button UI based on loaded state
       if (repeatMode === 'all') {
         repeatBtn.classList.add('active');
         repeatBtn.innerHTML = '<i class="fas fa-redo-alt"></i>';
@@ -93,12 +100,6 @@ document.addEventListener("DOMContentLoaded", function () {
         repeatBtn.classList.add('active');
         repeatBtn.innerHTML = '<i class="fas fa-retweet"></i>';
       }
-
-      playerSongTitle.textContent = songs[currentSongIndex].title;
-      document.title = songs[currentSongIndex].title + ' - Made By Teo';
-      allSongCards.forEach(card => {
-        card.classList.toggle('playing', parseInt(card.dataset.idx) === currentSongIndex);
-      });
     }
   }
 
@@ -107,48 +108,44 @@ document.addEventListener("DOMContentLoaded", function () {
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
     const s = Math.floor(seconds % 60);
-    if (h > 0) {
-      return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-    }
-    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    return (h > 0 ? `${h}:${m.toString().padStart(2, '0')}:` : '') + `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   }
 
   function updateProgress() {
     if (audio.duration) {
-      const percent = (audio.currentTime / audio.duration) * 100;
-      playerProgress.style.width = percent + "%";
+      playerProgress.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
       currentTimeEl.textContent = formatTime(audio.currentTime);
     }
   }
+  
+  function updatePlayingClass() {
+      allSongCards.forEach(card => {
+        const cardPlaylist = card.closest('#playlist-nonstop-col') ? 'nonstop' : 'houselak';
+        const isPlaying = card.dataset.idx == currentSongIndex && cardPlaylist === activePlaylist;
+        card.classList.toggle('playing', isPlaying);
+        if (isPlaying) {
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    });
+  }
 
   function loadSong(songIndex, restoreTime = 0) {
-    if (songIndex < 0 || songIndex >= songs.length) return;
+    if (songIndex < 0 || songIndex >= currentPlaylistSongs.length) return;
 
-    // Save previous state before changing song
     if (currentSongIndex !== -1 && songIndex !== currentSongIndex) {
-        previousState = {
-            songIndex: currentSongIndex,
-            currentTime: audio.currentTime
-        };
-        undoBtn.style.opacity = '1';
-        undoBtn.style.pointerEvents = 'auto';
+      previousState = { songIndex: currentSongIndex, currentTime: audio.currentTime, playlist: activePlaylist };
+      undoBtn.style.opacity = '1';
+      undoBtn.style.pointerEvents = 'auto';
     }
-    
-    const song = songs[songIndex];
+
     currentSongIndex = songIndex;
+    const song = currentPlaylistSongs[currentSongIndex];
     audio.src = song.src;
     audio.currentTime = restoreTime;
     playerSongTitle.textContent = song.title;
     document.title = song.title + ' - Made By Teo';
-
-    allSongCards.forEach(card => {
-      const isPlaying = parseInt(card.dataset.idx) === songIndex;
-      card.classList.toggle('playing', isPlaying);
-      if (isPlaying) {
-        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    });
     
+    updatePlayingClass();
     playCurrentSong();
   }
 
@@ -166,60 +163,68 @@ document.addEventListener("DOMContentLoaded", function () {
     if (isShuffle) {
       let nextIndex;
       do {
-        nextIndex = Math.floor(Math.random() * songs.length);
+        nextIndex = Math.floor(Math.random() * currentPlaylistSongs.length);
       } while (nextIndex === currentSongIndex);
       loadSong(nextIndex);
     } else {
-      loadSong((currentSongIndex + 1) % songs.length);
+      loadSong((currentSongIndex + 1) % currentPlaylistSongs.length);
     }
   }
 
   function playPrev() {
-    loadSong((currentSongIndex - 1 + songs.length) % songs.length);
+    loadSong((currentSongIndex - 1 + currentPlaylistSongs.length) % currentPlaylistSongs.length);
   }
 
-  // --- PLAYLIST & CARD GENERATION ---
-
-  function createSongCard(song, originalIndex) {
+  function createSongCard(song, index, playlistIndex) {
+    const delay = playlistIndex * 0.05;
     return `
-      <div class="song-card" data-idx="${originalIndex}">
+      <div class="song-card" data-idx="${index}" style="animation-delay: ${delay}s; transform: translateX(-30px);">
         <h2 class="song-title${song.rainbow ? ' rainbow-text2' : ''}">${song.title}</h2>
         <i class="fas fa-play play-btn-icon"></i>
       </div>
     `;
   }
 
-  const nonstopSongsHtml = songs.map((s, i) => (s.category === 'nonstop' ? createSongCard(s, i) : '')).join("");
-  const houselakSongsHtml = songs.map((s, i) => (s.category === 'houselak' ? createSongCard(s, i) : '')).join("");
-
-  playlistNonstopEl.innerHTML = nonstopSongsHtml;
-  playlistHouselakEl.innerHTML = houselakSongsHtml;
+  function renderPlaylists() {
+      playlistNonstopEl.innerHTML = nonstopSongs.map((s, i) => createSongCard(s, i, i)).join("");
+      playlistHouselakEl.innerHTML = houselakSongs.map((s, i) => createSongCard(s, i, i)).join("");
+      updateSongCardListeners();
+  }
   
-  allSongCards = document.querySelectorAll(".song-card");
+  function updateSongCardListeners() {
+      allSongCards = document.querySelectorAll(".song-card");
+      allSongCards.forEach(card => {
+        card.addEventListener('click', () => {
+            const songIndex = parseInt(card.dataset.idx);
+            const cardPlaylist = card.closest('#playlist-nonstop-col') ? 'nonstop' : 'houselak';
+            if (activePlaylist !== cardPlaylist) {
+                switchTab(cardPlaylist, false, () => loadSong(songIndex));
+            } else {
+                loadSong(songIndex);
+            }
+        });
+      });
+  }
 
-  // --- EVENT LISTENERS ---
-
-  // Player bar controls
   undoBtn.style.opacity = '0.5';
   undoBtn.style.pointerEvents = 'none';
   undoBtn.addEventListener('click', () => {
     if (previousState) {
-        const { songIndex, currentTime } = previousState;
-        previousState = null; // Use only once
-        undoBtn.style.opacity = '0.5';
-        undoBtn.style.pointerEvents = 'none';
-        loadSong(songIndex, currentTime);
+      const { songIndex, currentTime, playlist } = previousState;
+      previousState = null;
+      undoBtn.style.opacity = '0.5';
+      undoBtn.style.pointerEvents = 'none';
+      if(activePlaylist !== playlist) {
+          switchTab(playlist, false, () => loadSong(songIndex, currentTime));
+      } else {
+          loadSong(songIndex, currentTime);
+      }
     }
   });
 
   playPauseBtn.addEventListener('click', () => {
     if (currentSongIndex === -1) {
-      const rainbowSongIndex = songs.findIndex(song => song.rainbow);
-      if (rainbowSongIndex !== -1) {
-        loadSong(rainbowSongIndex);
-      } else {
-        loadSong(0); // Fallback to the first song
-      }
+      loadSong(0);
     } else {
       audio.paused ? playCurrentSong() : pauseCurrentSong();
     }
@@ -234,10 +239,10 @@ document.addEventListener("DOMContentLoaded", function () {
     if (repeatMode === 'none') {
       repeatMode = 'all';
       repeatBtn.classList.add('active');
-      repeatBtn.innerHTML = '<i class="fas fa-redo-alt"></i>'; // Icon for repeat all
+      repeatBtn.innerHTML = '<i class="fas fa-redo-alt"></i>';
     } else if (repeatMode === 'all') {
       repeatMode = 'one';
-      repeatBtn.innerHTML = '<i class="fas fa-retweet"></i>'; // Icon for repeat one
+      repeatBtn.innerHTML = '<i class="fas fa-retweet"></i>';
     } else {
       repeatMode = 'none';
       repeatBtn.classList.remove('active');
@@ -245,12 +250,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Audio element events
   audio.addEventListener('timeupdate', () => {
     updateProgress();
-    // Save state periodically
     if (audio.currentTime > 0 && audio.currentTime % 5 < 0.1) {
-        saveState();
+      saveState();
     }
   });
   audio.addEventListener('loadedmetadata', () => {
@@ -263,8 +266,7 @@ document.addEventListener("DOMContentLoaded", function () {
     } else if (repeatMode === 'all') {
       playNext();
     } else {
-      // 'none'
-      if (currentSongIndex < songs.length - 1) {
+      if (currentSongIndex < currentPlaylistSongs.length - 1) {
         playNext();
       } else {
         pauseCurrentSong();
@@ -272,77 +274,38 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Progress bar seeking (smooth scrubbing)
   function scrub(e) {
     const rect = playerProgressBar.getBoundingClientRect();
     const clickX = e.clientX - rect.left;
     const width = rect.width;
-    const percent = Math.min(100, Math.max(0, (clickX / width) * 100));
-    playerProgress.style.width = percent + "%";
     const newTime = (clickX / width) * audio.duration;
-    if (newTime >= 0 && newTime <= audio.duration) {
+    if (isFinite(newTime)) {
         audio.currentTime = newTime;
-        currentTimeEl.textContent = formatTime(newTime);
+        updateProgress();
     }
   }
-  playerProgressBar.addEventListener('mousedown', (e) => {
-    isDragging = true;
-    scrub(e);
-  });
-  document.addEventListener('mousemove', (e) => {
-    if (isDragging) {
-      scrub(e);
-    }
-  });
-  document.addEventListener('mouseup', () => {
-    isDragging = false;
-  });
+  playerProgressBar.addEventListener('mousedown', (e) => { isDragging = true; scrub(e); });
+  document.addEventListener('mousemove', (e) => { if (isDragging) { scrub(e); } });
+  document.addEventListener('mouseup', () => { isDragging = false; });
 
-  // Volume control
-  volumeBtn.addEventListener('click', (e) => {
-    e.stopPropagation(); // Prevent this click from immediately closing the popup
-    volumePopup.classList.toggle('visible');
-  });
-
-  // Hide popup when clicking anywhere else
+  volumeBtn.addEventListener('click', (e) => { e.stopPropagation(); volumePopup.classList.toggle('visible'); });
   document.addEventListener('click', (e) => {
     if (!volumeSection.contains(e.target) && volumePopup.classList.contains('visible')) {
       volumePopup.classList.remove('visible');
     }
   });
-
-  // Prevent clicks inside the popup from closing it
-  volumePopup.addEventListener('click', (e) => {
-    e.stopPropagation();
-  });
-
+  volumePopup.addEventListener('click', (e) => e.stopPropagation());
   volumeSlider.addEventListener('input', (e) => {
     audio.volume = e.target.value;
-    // Also update the icon based on volume
     const icon = volumeBtn.querySelector('i');
-    if (audio.volume > 0.5) {
-        icon.className = 'fas fa-volume-up';
-    } else if (audio.volume > 0) {
-        icon.className = 'fas fa-volume-down';
-    } else {
-        icon.className = 'fas fa-volume-mute';
-    }
+    if (audio.volume > 0.5) icon.className = 'fas fa-volume-up';
+    else if (audio.volume > 0) icon.className = 'fas fa-volume-down';
+    else icon.className = 'fas fa-volume-mute';
   });
 
-
-  // Song card clicks
-  allSongCards.forEach(card => {
-    card.addEventListener('click', () => {
-      const songIndex = parseInt(card.dataset.idx);
-      loadSong(songIndex);
-    });
-  });
-
-  // Tab switching
   const highlighter = document.querySelector('.active-tab-highlighter');
   const tabs = document.querySelectorAll('.playlist-tab');
   const scrollPositions = { nonstop: 0, houselak: 0 };
-  let activeTab = 'nonstop';
 
   function moveHighlighter(tab) {
     highlighter.style.width = `${tab.offsetWidth}px`;
@@ -350,16 +313,13 @@ document.addEventListener("DOMContentLoaded", function () {
     highlighter.style.transform = `translateX(${tab.offsetLeft}px)`;
   }
 
-  function switchTab(newTab) {
-    if (activeTab === newTab) return;
-
-    // Save current scroll position
-    scrollPositions[activeTab] = window.scrollY || document.documentElement.scrollTop;
-
-    // Update active tab
-    activeTab = newTab;
-
-    // Update UI
+  function switchTab(newTab, isInitialLoad = false, callback) {
+    if (!isInitialLoad && activePlaylist === newTab) return;
+    if (!isInitialLoad) scrollPositions[activePlaylist] = window.scrollY || document.documentElement.scrollTop;
+    
+    activePlaylist = newTab;
+    currentPlaylistSongs = (newTab === 'nonstop') ? nonstopSongs : houselakSongs;
+    
     tabs.forEach(t => t.classList.remove('active'));
     const newActiveTab = document.getElementById(`tab-${newTab}`);
     newActiveTab.classList.add('active');
@@ -368,8 +328,9 @@ document.addEventListener("DOMContentLoaded", function () {
     colNonstop.classList.toggle('playlist-hidden', newTab !== 'nonstop');
     colHouselak.classList.toggle('playlist-hidden', newTab !== 'houselak');
 
-    // Restore new tab's scroll position
-    window.scrollTo(0, scrollPositions[newTab]);
+    if (!isInitialLoad) window.scrollTo(0, scrollPositions[newTab]);
+    
+    if (callback) callback();
   }
 
   tabs.forEach(tab => {
@@ -379,10 +340,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Initial highlighter position
-  moveHighlighter(document.querySelector('.playlist-tab.active'));
-
-  // Search
   let notFoundMsg = null;
   if (searchInput) {
     notFoundMsg = document.createElement('div');
@@ -392,39 +349,30 @@ document.addEventListener("DOMContentLoaded", function () {
     
     searchInput.addEventListener('input', function() {
       const keyword = this.value.trim().toLowerCase();
-      let found = 0;
-      allSongCards.forEach(card => {
+      let foundCount = 0;
+      document.querySelectorAll('.song-card').forEach(card => {
         const title = card.querySelector('.song-title').textContent.toLowerCase();
-        if (title.includes(keyword)) {
+        const cardPlaylist = card.closest('#playlist-nonstop-col') ? 'nonstop' : 'houselak';
+        if (title.includes(keyword) && cardPlaylist === activePlaylist) {
           card.style.display = 'flex';
-          found++;
+          foundCount++;
         } else {
           card.style.display = 'none';
         }
       });
-      notFoundMsg.style.display = found === 0 ? '' : 'none';
+      notFoundMsg.style.display = foundCount === 0 ? '' : 'none';
     });
   }
 
-  // Popup
-  setTimeout(() => {
-    if (popup) popup.classList.add("show");
-  }, 1000);
-
-  // Load state on page load
+  renderPlaylists();
   loadState();
-
-  // Save state before leaving
   window.addEventListener('beforeunload', saveState);
 });
 
-// Global function for popup
 function closePopup() {
   let popup = document.getElementById("popup");
   if (popup) {
     popup.classList.remove("show");
-    setTimeout(() => {
-      popup.style.display = "none";
-    }, 500);
+    setTimeout(() => { popup.style.display = "none"; }, 500);
   }
 }
