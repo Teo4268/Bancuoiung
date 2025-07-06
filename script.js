@@ -1,4 +1,26 @@
 document.addEventListener("DOMContentLoaded", function () {
+  const introScreen = document.getElementById('intro-screen');
+  const introGrid = document.querySelector('.intro-grid');
+  const gridSize = 10;
+
+  for (let i = 0; i < gridSize * gridSize; i++) {
+    const item = document.createElement('div');
+    item.classList.add('grid-item');
+    item.style.animationDelay = `${Math.random() * 1}s`;
+    
+    // Gradient colors from the image
+    const colors = ['#a993ff', '#7b68ee', '#d8bfd8', '#dda0dd', '#da70d6'];
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    
+    item.style.backgroundColor = randomColor;
+    
+    introGrid.appendChild(item);
+  }
+
+  setTimeout(() => {
+    introScreen.classList.add('hidden');
+  }, 1500);
+
   const songs = [...nonstopSongs, ...houselakSongs];
   // Global player elements
   const audio = new Audio();
@@ -65,7 +87,11 @@ document.addEventListener("DOMContentLoaded", function () {
     document.title = song.title + ' - Made By Teo';
 
     allSongCards.forEach(card => {
-      card.classList.toggle('playing', parseInt(card.dataset.idx) === songIndex);
+      const isPlaying = parseInt(card.dataset.idx) === songIndex;
+      card.classList.toggle('playing', isPlaying);
+      if (isPlaying) {
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     });
     
     playCurrentSong();
