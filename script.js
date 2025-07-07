@@ -52,8 +52,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const searchInput = document.getElementById('searchInput');
   const tabNonstop = document.getElementById('tab-nonstop');
   const tabHouselak = document.getElementById('tab-houselak');
+  const tabComingSoon = document.getElementById('tab-comingsoon');
   const colNonstop = document.getElementById('playlist-nonstop-col');
   const colHouselak = document.getElementById('playlist-houselak-col');
+  const colComingSoon = document.getElementById('playlist-comingsoon-col');
   const playlistNonstopEl = document.getElementById("playlist-nonstop");
   const playlistHouselakEl = document.getElementById("playlist-houselak");
 
@@ -318,7 +320,13 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!isInitialLoad) scrollPositions[activePlaylist] = window.scrollY || document.documentElement.scrollTop;
     
     activePlaylist = newTab;
-    currentPlaylistSongs = (newTab === 'nonstop') ? nonstopSongs : houselakSongs;
+    if (newTab === 'nonstop') {
+        currentPlaylistSongs = nonstopSongs;
+    } else if (newTab === 'houselak') {
+        currentPlaylistSongs = houselakSongs;
+    } else {
+        currentPlaylistSongs = [];
+    }
     
     tabs.forEach(t => t.classList.remove('active'));
     const newActiveTab = document.getElementById(`tab-${newTab}`);
@@ -327,8 +335,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     colNonstop.classList.toggle('playlist-hidden', newTab !== 'nonstop');
     colHouselak.classList.toggle('playlist-hidden', newTab !== 'houselak');
+    colComingSoon.classList.toggle('playlist-hidden', newTab !== 'comingsoon');
 
-    if (!isInitialLoad) window.scrollTo(0, scrollPositions[newTab]);
+    if (!isInitialLoad) window.scrollTo(0, scrollPositions[newTab] || 0);
     
     if (callback) callback();
   }
@@ -376,3 +385,28 @@ function closePopup() {
     setTimeout(() => { popup.style.display = "none"; }, 500);
   }
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const coinPopupContent = document.querySelector('.coin-popup-content');
+
+    // Fetch coin balance
+    fetch('https://api.mbc.wiki/balance/BkNmv6nUnP7ME3Ev7hydJzSFQBW2WvNeGL')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data && data.result && data.result.balance !== undefined) {
+                const balance = Math.floor(data.result.balance / 10000);
+                coinPopupContent.innerHTML = `<p>${balance.toLocaleString()}/50,000 lần</p>`;
+            } else {
+                coinPopupContent.innerHTML = `<p>Invalid</p>`;
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching coin balance:', error);
+            coinPopupContent.innerHTML = `<p>Error</p>`;
+        });
+});

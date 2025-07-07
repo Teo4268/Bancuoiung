@@ -44,7 +44,7 @@ body {
   background: #282828;
   color: var(--text-color);
   outline: none;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .search-bar:focus {
@@ -68,7 +68,7 @@ body {
   background: var(--rainbow-gradient);
   background-size: 200% 200%;
   border-radius: 50px;
-  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
   animation: rainbow-animation 4s ease infinite;
 }
 
@@ -83,7 +83,7 @@ body {
   cursor: pointer;
   position: relative;
   z-index: 1;
-  transition: color 0.3s ease;
+  transition: color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .playlist-tab.active {
@@ -101,9 +101,16 @@ body {
   grid-template-columns: 1fr;
 }
 
-#playlist-nonstop-col, #playlist-houselak-col {
+#playlist-nonstop-col, #playlist-houselak-col, #playlist-comingsoon-col {
   width: 100%;
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  transition: opacity 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+#playlist-comingsoon-col h2 {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 2rem;
+    color: var(--text-secondary-color);
 }
 
 .playlist-hidden {
@@ -126,11 +133,11 @@ body {
   background: var(--card-color);
   border-radius: 12px;
   padding: 16px;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
   border: 1px solid #282828;
   cursor: pointer;
   position: relative;
-  animation: slide-in 0.5s forwards;
+  animation: slide-in 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
   opacity: 0;
 }
 
@@ -171,7 +178,7 @@ body {
   right: 16px;
   opacity: 0;
   transform: translateY(10px);
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .song-card:hover .play-btn-icon, .song-card.playing .play-btn-icon {
@@ -229,7 +236,7 @@ body {
   color: var(--text-secondary-color);
   font-size: 20px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .player-btn:hover {
@@ -293,7 +300,7 @@ body {
   opacity: 0;
   visibility: hidden;
   transform: translateY(10px);
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .volume-popup.visible {
@@ -352,7 +359,7 @@ body {
   z-index: 1000;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.5s ease, visibility 0.5s;
+  transition: opacity 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), visibility 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .popup.show {
@@ -369,7 +376,7 @@ body {
   text-align: center;
   box-shadow: 0 0 20px rgba(0,0,0,0.5);
   transform: scale(0.9);
-  transition: transform 0.3s ease;
+  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
   width: 90%;
   max-width: 360px;
 }
@@ -389,7 +396,7 @@ body {
   cursor: pointer;
   font-weight: 600;
   border-radius: 50px;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .popup button:hover {
@@ -413,7 +420,7 @@ body {
   text-decoration: none;
   border-radius: 50px;
   margin: 15px 0;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .popup-link:hover {
@@ -473,6 +480,76 @@ footer p {
     opacity: 1;
     transform: scale(1);
   }
+}
+
+.coin-popup-container {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  z-index: 1002;
+}
+
+.coin-popup {
+  display: flex;
+  align-items: center;
+  width: auto;
+  padding: 4px 8px;
+  background-color: var(--card-color);
+  border: 1px solid #282828;
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  font-size: 0.8rem;
+}
+
+.coin-popup-header {
+  padding-right: 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.coin-popup-content {
+  padding: 0 4px;
+  text-align: center;
+}
+
+.info-btn-container {
+  position: relative;
+}
+
+.info-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary-color);
+  font-size: 12px;
+  cursor: pointer;
+  margin-left: 5px;
+  padding: 0;
+}
+
+.info-popup {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  width: 280px;
+  padding: 15px;
+  background-color: #2D2D2D;
+  border: 1px solid #444;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+  z-index: 1003;
+  text-align: left;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--text-secondary-color);
+}
+
+.info-btn-container:hover .info-popup {
+  display: block;
 }
 
 @media (max-width: 768px) {

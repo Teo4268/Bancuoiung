@@ -22,6 +22,7 @@
       <div class="active-tab-highlighter"></div>
       <button id="tab-nonstop" class="playlist-tab active">Nonstop</button>
       <button id="tab-houselak" class="playlist-tab">HouseLak</button>
+      <button id="tab-comingsoon" class="playlist-tab">Comming soon...</button>
     </div>
   </div>
   <div class="container" tabindex="0">
@@ -31,6 +32,9 @@
       </div>
       <div id="playlist-houselak-col" class="playlist-hidden">
         <div id="playlist-houselak"></div>
+      </div>
+      <div id="playlist-comingsoon-col" class="playlist-hidden">
+        <h2>Comming soon...</h2>
       </div>
     </div>
 
@@ -78,6 +82,19 @@
     <button onclick="closePopup()" aria-label="Đóng thông báo">X</button>
   </div>
  </div>
-  
+<div class="coin-popup-container">
+  <div id="coin-popup" class="coin-popup">
+    <div class="coin-popup-header">Số truy cập:</div>
+    <div class="coin-popup-content">
+      <p>Loading...</p>
+    </div>
+    <div class="info-btn-container">
+      <button id="info-btn" class="info-btn"><i class="fas fa-info-circle"></i></button>
+      <div id="info-popup" class="info-popup">
+        <p>Khi số lượt truy cập đạt mốc <strong>50,000</strong>, một sự kiện đặc biệt sẽ được tổ chức trong group Telegram. Hãy tham gia để không bỏ lỡ nhé!</p>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
