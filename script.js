@@ -6,22 +6,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const tenMinutes = 10 * 60 * 1000;
 
   if (!lastShown || (now - lastShown > tenMinutes)) {
-    const introGrid = document.querySelector('.intro-grid');
-    const gridSize = 10;
-    for (let i = 0; i < gridSize * gridSize; i++) {
-      const item = document.createElement('div');
-      item.classList.add('grid-item');
-      item.style.animationDelay = `${Math.random() * 1}s`;
-      const colors = ['#a993ff', '#7b68ee', '#d8bfd8', '#dda0dd', '#da70d6'];
-      item.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-      introGrid.appendChild(item);
-    }
-    setTimeout(() => { introScreen.classList.add('hidden'); }, 1000);
-    setTimeout(() => { if (popup) popup.classList.add("show"); }, 1500);
+    setTimeout(() => { introScreen.classList.add('hidden'); }, 2000); // Hide after 2s
+    setTimeout(() => { if (popup) popup.classList.add("show"); }, 2500); // Show popup after
     localStorage.setItem('lastShown', now);
   } else {
     introScreen.style.display = 'none';
-    popup.style.display = 'none';
+    if (popup) popup.style.display = 'none';
   }
 
   const audio = new Audio();
@@ -33,6 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let isDragging = false;
   let isShuffle = false;
   let repeatMode = 'none';
+  let throttleTimeout = null;
 
   const undoBtn = document.getElementById('undo-btn');
   const playPauseBtn = document.getElementById('play-pause-btn');
@@ -58,6 +49,23 @@ document.addEventListener("DOMContentLoaded", function () {
   const colComingSoon = document.getElementById('playlist-comingsoon-col');
   const playlistNonstopEl = document.getElementById("playlist-nonstop");
   const playlistHouselakEl = document.getElementById("playlist-houselak");
+  
+  const analyticPopup = document.getElementById('analytic-popup');
+  const analyticIcon = document.getElementById('analytic-icon');
+  const closeAnalyticPopup = document.getElementById('close-analytic-popup');
+
+  if (analyticIcon) {
+    analyticIcon.addEventListener('click', () => {
+      if (analyticPopup) analyticPopup.classList.add('show');
+    });
+  }
+
+  if (closeAnalyticPopup) {
+    closeAnalyticPopup.addEventListener('click', () => {
+      if (analyticPopup) analyticPopup.classList.remove('show');
+    });
+  }
+  
 
   function saveState() {
     if (currentSongIndex !== -1) {
@@ -117,6 +125,15 @@ document.addEventListener("DOMContentLoaded", function () {
     if (audio.duration) {
       playerProgress.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
       currentTimeEl.textContent = formatTime(audio.currentTime);
+    }
+  }
+
+  function throttledUpdateProgress() {
+    if (!throttleTimeout) {
+      throttleTimeout = setTimeout(() => {
+        updateProgress();
+        throttleTimeout = null;
+      }, 250); // Update every 250ms
     }
   }
   
@@ -253,7 +270,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   audio.addEventListener('timeupdate', () => {
-    updateProgress();
+    throttledUpdateProgress();
     if (audio.currentTime > 0 && audio.currentTime % 5 < 0.1) {
       saveState();
     }
@@ -352,7 +369,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let notFoundMsg = null;
   if (searchInput) {
     notFoundMsg = document.createElement('div');
-    notFoundMsg.textContent = 'Không tìm thấy bài hát.';
+    notFoundMsg.textContent = 'No songs found.';
     notFoundMsg.style.cssText = 'color:#bbb;text-align:center;padding:16px 0;display:none;font-size:1.1rem;';
     playlistNonstopEl.parentNode.insertBefore(notFoundMsg, playlistNonstopEl);
     

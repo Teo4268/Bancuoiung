@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -14,15 +14,17 @@
 </head>
 <body>
   <div id="intro-screen">
-    <div class="intro-grid"></div>
+    <h1 class="intro-title">
+      <span>L</span><span>o</span><span>a</span><span>d</span><span>i</span><span>n</span><span>g</span><span>.</span><span>.</span><span>.</span>
+    </h1>
   </div>
   <div class="search-bar-wrap">
-    <input type="text" id="searchInput" class="search-bar" placeholder="Tìm bài hát...">
+    <input type="text" id="searchInput" class="search-bar" placeholder="Search for a song...">
     <div class="playlist-tab-row">
       <div class="active-tab-highlighter"></div>
       <button id="tab-nonstop" class="playlist-tab active">Nonstop</button>
       <button id="tab-houselak" class="playlist-tab">HouseLak</button>
-      <button id="tab-comingsoon" class="playlist-tab">Comming soon...</button>
+      <button id="tab-comingsoon" class="playlist-tab">Coming soon...</button>
     </div>
   </div>
   <div class="container" tabindex="0">
@@ -34,7 +36,7 @@
         <div id="playlist-houselak"></div>
       </div>
       <div id="playlist-comingsoon-col" class="playlist-hidden">
-        <h2>Comming soon...</h2>
+        <h2>Coming soon...</h2>
       </div>
     </div>
 
@@ -86,7 +88,7 @@
   <div id="coin-popup" class="coin-popup">
     <div class="coin-popup-header">Số truy cập:</div>
     <div class="coin-popup-content">
-      <p>Loading...</p>
+      <p>Đang tải...</p>
     </div>
     <div class="info-btn-container">
       <button id="info-btn" class="info-btn"><i class="fas fa-info-circle"></i></button>
@@ -96,7 +98,17 @@
     </div>
   </div>
 </div>
-<script src="chunk-vendors.11a54240.js" defer></script>
-<script src="app.4645aab8.min.js" defer></script>
+
+<div id="analytic-popup" class="analytic-popup">
+  <div class="analytic-popup-content">
+    <button id="close-analytic-popup" class="close-analytic-popup">&times;</button>
+    <iframe src="https://anylystic.pages.dev/" frameborder="0"></iframe>
+  </div>
+</div>
+
+<button id="analytic-icon" class="analytic-icon">
+  <i class="fas fa-chart-bar"></i>
+</button>
+
 </body>
 </html>
