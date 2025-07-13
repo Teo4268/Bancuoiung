@@ -27,5 +27,6 @@ const nonstopSongs = [
   { title: "NST #28", src: "https://pub-23c7a67d9ab14022848bc8c2d1e9c57b.r2.dev/5_6203924811320660619.mp3", rainbow: false, category: "nonstop" },
   { title: "NST #29", src: "https://api1.mamacooks0010.workers.dev/5_6138710822467148861.mp3", rainbow: false, category: "nonstop" },
   { title: "NST #30", src: "https://black-water-42f2.mamacooks0010.workers.dev/5_6140962622280832713.mp3", rainbow: false, category: "nonstop" },
-  { title: "NST #31", src: "https://pub-17967b384d31452abcc6c0adb3cd8457.r2.dev/5_6230768915266410350.mp3", rainbow: true, category: "nonstop" }
+  { title: "NST #31", src: "https://pub-17967b384d31452abcc6c0adb3cd8457.r2.dev/5_6230768915266410350.mp3", rainbow: true, category: "nonstop" },
+  { title: "NST #32", src: "https://pub-17967b384d31452abcc6c0adb3cd8457.r2.dev/20250713-135016_5_6312011210967488405.mp3", rainbow: true, category: "nonstop" }
 ].sort((a, b) => a.title.localeCompare(b.title, undefined, { numeric: true })).map((song, index) => ({ ...song, title: `NST #${index + 2}` }));
